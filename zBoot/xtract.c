@@ -49,7 +49,7 @@ int main(int argc, char ** argv)
 	if (read(id,buf,GCC_HEADER) != GCC_HEADER)
 		die("Unable to read header of 'system'");
 	if (N_MAGIC(*ex) != ZMAGIC)
-		die("Non-GCC header of 'system'");
+		;//die("Non-GCC header of 'system'");
 
 	sz = N_SYMOFF(*ex) - GCC_HEADER + 4;	/* +4 to get the same result than tools/build */
 

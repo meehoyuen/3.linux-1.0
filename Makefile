@@ -3,7 +3,7 @@ PATCHLEVEL = 0
 SUBLEVEL = 9
 
 LINUXPATH=/home/shiyanlou/0.linux-1.0
-all:	Version zImage
+all:	Version zImage bochs
 
 .EXPORT_ALL_VARIABLES:
 
@@ -182,6 +182,10 @@ zImage: $(CONFIGURE) boot/bootsect boot/setup zBoot/zSystem tools/build
 
 zdisk: zImage
 	dd bs=8192 if=zImage of=/dev/fd0
+
+bochs: zImage
+	dd bs=512 if=/dev/zero of=c.img count=163296 #162*16*63*512=80M
+	dd bs=8192 if=zImage of=c.img conv=notrunc
 
 zlilo: $(CONFIGURE) zImage
 	if [ -f /vmlinuz ]; then mv /vmlinuz /vmlinuz.old; fi
