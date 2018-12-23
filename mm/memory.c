@@ -61,7 +61,7 @@ int nr_secondary_pages = 0;
 unsigned long secondary_page_list = 0;
 
 #define copy_page(from,to) \
-__asm__("cld ; rep ; movsl": :"S" (from),"D" (to),"c" (1024):"cx","di","si")
+__asm__("cld ; rep ; movsl": :"S" (from),"D" (to),"c" (1024))
 
 unsigned short * mem_map = NULL;
 
@@ -651,7 +651,7 @@ void do_wp_page(unsigned long error_code, unsigned long address,
 	*pg_table = 0;
 }
 
-int __verify_write(unsigned long start, unsigned long size)
+int verify_write(unsigned long start, unsigned long size)
 {
 	size--;
 	size += start & ~PAGE_MASK;
@@ -943,8 +943,7 @@ unsigned long __bad_pagetable(void)
 	__asm__ __volatile__("cld ; rep ; stosl":
 		:"a" (BAD_PAGE + PAGE_TABLE),
 		 "D" ((long) empty_bad_page_table),
-		 "c" (PTRS_PER_PAGE)
-		:"di","cx");
+		 "c" (PTRS_PER_PAGE));
 	return (unsigned long) empty_bad_page_table;
 }
 
@@ -955,8 +954,7 @@ unsigned long __bad_page(void)
 	__asm__ __volatile__("cld ; rep ; stosl":
 		:"a" (0),
 		 "D" ((long) empty_bad_page),
-		 "c" (PTRS_PER_PAGE)
-		:"di","cx");
+		 "c" (PTRS_PER_PAGE));
 	return (unsigned long) empty_bad_page;
 }
 
@@ -967,8 +965,7 @@ unsigned long __zero_page(void)
 	__asm__ __volatile__("cld ; rep ; stosl":
 		:"a" (0),
 		 "D" ((long) empty_zero_page),
-		 "c" (PTRS_PER_PAGE)
-		:"di","cx");
+		 "c" (PTRS_PER_PAGE));
 	return (unsigned long) empty_zero_page;
 }
 
@@ -1107,7 +1104,7 @@ void mem_init(unsigned long start_low_mem,
 	wp_works_ok = -1;
 	pg0[0] = PAGE_READONLY;
 	invalidate();
-	__asm__ __volatile__("movb 0,%%al ; movb %%al,0": : :"ax", "memory");
+	__asm__ __volatile__("movb 0,%%al ; movb %%al,0":);
 	pg0[0] = 0;
 	invalidate();
 	if (wp_works_ok < 0)

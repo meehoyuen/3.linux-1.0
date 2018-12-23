@@ -20,9 +20,9 @@
 .text
 
 	.align 2,144
-.globl _normalize
+.globl normalize
 
-_normalize:
+normalize:
 	pushl	%ebp
 	movl	%esp,%ebp
 	pushl	%ebx
@@ -100,9 +100,9 @@ L_overflow:
 
 /* Normalise without reporting underflow or overflow */
 	.align 2,144
-.globl _normalize_nuo
+.globl normalize_nuo
 
-_normalize_nuo:
+normalize_nuo:
 	pushl	%ebp
 	movl	%esp,%ebp
 	pushl	%ebx

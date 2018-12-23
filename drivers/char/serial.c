@@ -535,7 +535,7 @@ static void rs_interrupt(int irq)
 		}
 	}
 	if ((info = IRQ_ports[irq]) != NULL) {
-#ifdef 0
+#if 0
 		do {
 			serial_outp(info, UART_IER, 0);
 			serial_out(info, UART_IER, info->IER);

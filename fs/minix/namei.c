@@ -27,8 +27,7 @@ static inline int namecompare(int len, int maxlen,
 		unsigned char same;
 		__asm__("repe ; cmpsb ; setz %0"
 			:"=q" (same)
-			:"S" ((long) name),"D" ((long) buffer),"c" (len)
-			:"cx","di","si");
+			:"S" ((long) name),"D" ((long) buffer),"c" (len));
 		return same;
 	}
 	return 0;

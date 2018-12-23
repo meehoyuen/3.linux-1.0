@@ -295,7 +295,7 @@ icmp_timestamp(struct icmphdr *icmph, struct sk_buff *skb, struct device *dev,
   struct sk_buff *skb2;
   int size, offset;
   unsigned long *timeptr, midtime;
-  extern struct timeval xtime;			/* kernel/time.c */
+  extern volatile struct timeval xtime;			/* kernel/time.c */
 
   size = sizeof(struct sk_buff) + dev->hard_header_len + 64 + len;
   if (! (skb2 = alloc_skb(size, GFP_ATOMIC))) {

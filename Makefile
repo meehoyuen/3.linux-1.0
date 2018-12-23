@@ -2,6 +2,7 @@ VERSION = 1
 PATCHLEVEL = 0
 SUBLEVEL = 9
 
+LINUXPATH=/home/shiyanlou/0.linux-1.0
 all:	Version zImage
 
 .EXPORT_ALL_VARIABLES:
@@ -50,17 +51,12 @@ SVGA_MODE=	-DSVGA_MODE=NORMAL_VGA
 # standard CFLAGS
 #
 
-CFLAGS = -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -pipe
+CFLAGS = -fno-builtin -I$(LINUXPATH)/include -Wall -O2 -fno-stack-protector -fomit-frame-pointer -pipe
 
 ifdef CONFIG_CPP
 CFLAGS := $(CFLAGS) -x c++
 endif
 
-ifdef CONFIG_M486
-CFLAGS := $(CFLAGS) -m486
-else
-CFLAGS := $(CFLAGS) -m386
-endif
 
 #
 # if you want the ram-disk device, define this to be the
@@ -72,13 +68,13 @@ endif
 AS86	=as86 -0 -a
 LD86	=ld86 -0
 
-AS	=as
-LD	=ld
+AS	=as --32
+LD	=ld -m elf_i386
 LDFLAGS	=#-qmagic
 HOSTCC	=gcc
-CC	=gcc -D__KERNEL__
+CC	=gcc -m32 -D__KERNEL__
 MAKE	=make
-CPP	=$(CC) -E
+CPP	=$(CC) -m32 -E -I$(LINUXPATH)/include
 AR	=ar
 STRIP	=strip
 
@@ -91,7 +87,7 @@ DRIVERS		=drivers/block/block.a \
 LIBS		=lib/lib.a
 SUBDIRS		=kernel drivers mm fs net ipc ibcs lib
 
-KERNELHDRS	=/usr/src/linux/include
+KERNELHDRS	=$(LINUXPATH)/include
 
 ifdef CONFIG_SCSI
 DRIVERS := $(DRIVERS) drivers/scsi/scsi.a

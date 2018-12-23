@@ -30,8 +30,7 @@
 		"rep\n\t" \
 		"stosl" \
 		: \
-		:"a" (value), "c" (size / 4), "D" ((long) (addr)) \
-		:"cx", "di")
+		:"a" (value), "c" (size / 4), "D" ((long) (addr)))
 
 static int ext2_secrm_seed = 152;	/* Random generator base */
 

@@ -237,7 +237,7 @@ struct task_struct {
 	unsigned long swap_cnt;		/* number of pages to swap on next pass */
 	short swap_table;		/* current page table */
 	short swap_page;		/* current page */
-#endif NEW_SWAP
+#endif //NEW_SWAP
 	struct vm_area_struct *stk_vma;
 };
 
@@ -307,7 +307,7 @@ extern struct task_struct *current;
 extern unsigned long volatile jiffies;
 extern unsigned long itimer_ticks;
 extern unsigned long itimer_next;
-extern struct timeval xtime;
+extern volatile struct timeval xtime;
 extern int need_resched;
 
 #define CURRENT_TIME (xtime.tv_sec)
@@ -357,20 +357,19 @@ __asm__("str %%ax\n\t" \
  * tha math co-processor latest.
  */
 #define switch_to(tsk) \
-__asm__("cmpl %%ecx,_current\n\t" \
+__asm__("cmpl %%ecx,current\n\t" \
 	"je 1f\n\t" \
 	"cli\n\t" \
-	"xchgl %%ecx,_current\n\t" \
+	"xchgl %%ecx,current\n\t" \
 	"ljmp %0\n\t" \
 	"sti\n\t" \
-	"cmpl %%ecx,_last_task_used_math\n\t" \
+	"cmpl %%ecx,last_task_used_math\n\t" \
 	"jne 1f\n\t" \
 	"clts\n" \
 	"1:" \
 	: /* no output */ \
 	:"m" (*(((char *)&tsk->tss.tr)-4)), \
-	 "c" (tsk) \
-	:"cx")
+	 "c" (tsk))
 
 #define _set_base(addr,base) \
 __asm__("movw %%dx,%0\n\t" \
@@ -381,8 +380,7 @@ __asm__("movw %%dx,%0\n\t" \
 	:"m" (*((addr)+2)), \
 	 "m" (*((addr)+4)), \
 	 "m" (*((addr)+7)), \
-	 "d" (base) \
-	:"dx")
+	 "d" (base))
 
 #define _set_limit(addr,limit) \
 __asm__("movw %%dx,%0\n\t" \
@@ -394,8 +392,7 @@ __asm__("movw %%dx,%0\n\t" \
 	: /* no output */ \
 	:"m" (*(addr)), \
 	 "m" (*((addr)+6)), \
-	 "d" (limit) \
-	:"dx")
+	 "d" (limit))
 
 #define set_base(ldt,base) _set_base( ((char *)&(ldt)) , base )
 #define set_limit(ldt,limit) _set_limit( ((char *)&(ldt)) , (limit-1)>>12 )
@@ -564,7 +561,6 @@ extern struct desc_struct default_ldt;
 		__asm__("movl %0,%%edx\n\t" \
 			"movl %%edx,%%db" #register "\n\t" \
 			: /* no output */ \
-			:"m" (current->debugreg[register]) \
-			:"dx");
+			:"m" (current->debugreg[register]))
 
 #endif

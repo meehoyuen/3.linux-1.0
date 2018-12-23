@@ -4,14 +4,14 @@
  * This is a collection of several routines from gzip-1.0.3 
  * adapted for Linux.
  *
- * malloc by Hannu Savolainen 1993
+ * zmalloc by Hannu Savolainen 1993
  * puts by Nick Holloway 1993
  */
 
 #include "gzip.h"
 #include "lzw.h"
 
-#include <linux/segment.h>
+#include "../include/linux/segment.h"
 
 /*
  * These are set up by the setup-routine at boot-time:
@@ -50,8 +50,8 @@ unsigned outcnt;
 unsigned insize;
 unsigned inptr;
 
-extern char input_data[];
-extern int input_len;
+char input_data[];
+int input_len;
 
 int input_ptr;
 
@@ -78,7 +78,7 @@ local int get_method(int);
 char *vidmem = (char *)0xb8000;
 int lines, cols;
 
-void *malloc(int size)
+void *zmalloc(int size)
 {
 	void *p;
 

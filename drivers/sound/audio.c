@@ -115,8 +115,7 @@ translate_bytes (const void *table, void *buff, unsigned long n)
 	   "xlatb\n\t"
 	   "stosb\n\t"
 	   "loop 1b\n\t":
-	   :"b" ((long) table), "c" (n), "D" ((long) buff), "S" ((long) buff)
-	   :"bx", "cx", "di", "si", "ax");
+	   :"b" ((long) table), "c" (n), "D" ((long) buff), "S" ((long) buff));
 }
 
 #endif

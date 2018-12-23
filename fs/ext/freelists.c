@@ -42,7 +42,7 @@ __asm__("cld\n\t" \
         "rep\n\t" \
         "stosl" \
         : \
-        :"a" (0),"c" (BLOCK_SIZE/4),"D" ((long) (addr)):"cx","di")
+        :"a" (0),"c" (BLOCK_SIZE/4),"D" ((long) (addr)))
 
 void ext_free_block(struct super_block * sb, int block)
 {

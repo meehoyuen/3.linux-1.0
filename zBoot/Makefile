@@ -6,7 +6,7 @@ SYSTEM = ../tools/zSystem
 
 zOBJECTS = $(HEAD) inflate.o unzip.o misc.o
 
-CFLAGS = -O2 -DSTDC_HEADERS $(TEST)
+CFLAGS = -O2 -m32 -fno-stack-protector -DSTDC_HEADERS $(TEST)
 
 .c.s:
 	$(CC) $(CFLAGS) -S -o $*.s $<
@@ -17,16 +17,17 @@ CFLAGS = -O2 -DSTDC_HEADERS $(TEST)
 
 all:	zSystem
 
-zSystem:	piggy.o $(zOBJECTS)
-		$(LD) $(LDFLAGS) -o zSystem -Ttext 1000 $(zOBJECTS) piggy.o
+zSystem:piggy.o $(zOBJECTS)
+	$(LD) $(LDFLAGS) -o zSystem -Ttext 1000 $(zOBJECTS) piggy.o
 
 head.o:	head.s
 
 head.s: head.S ../include/linux/tasks.h
 	$(CPP) -traditional head.S -o head.s
-
-piggy.o:	$(SYSTEM) xtract piggyback
-		./xtract $(SYSTEM) | gzip -9 | ./piggyback > piggy.o
+xtract: xtract.c
+	$(CC) -O2 -DSTDC_HEADERS -o $@ $<
+piggy.o: $(SYSTEM) xtract piggyback
+	./xtract $(SYSTEM) | gzip -9 | ./piggyback > piggy.o
 
 $(SYSTEM):
-		$(MAKE) -C .. tools/zSystem
+	$(MAKE) -C .. tools/zSystem

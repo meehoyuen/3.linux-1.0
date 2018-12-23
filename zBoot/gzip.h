@@ -20,6 +20,20 @@
 #if defined(HAVE_STRING_H) || defined(STDC_HEADERS)
 #  include <string.h>
 #  define memzero(s, n)     memset ((s), 0, (n))
+extern inline int memcmp(const void * cs,const void * ct,size_t count)
+{
+register int __res __asm__("ax");
+__asm__("cld\n\t"
+        "repe\n\t"
+        "cmpsb\n\t"
+        "je 1f\n\t"
+        "movl $1,%%eax\n\t"
+        "jb 1f\n\t"
+        "negl %%eax\n"
+        "1:"
+        :"=a" (__res):"0" (0),"D" (cs),"S" (ct),"c" (count));
+return __res;
+}
 #else
 #  include <strings.h>
 #  define strchr            index 

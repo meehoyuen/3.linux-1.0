@@ -433,15 +433,14 @@ static void scrup(int currcons, unsigned int t, unsigned int b)
 			__asm__("cld\n\t"
 				"rep\n\t"
 				"movsl\n\t"
-				"movl _video_num_columns,%1\n\t"
+				"movl video_num_columns,%1\n\t"
 				"rep\n\t"
 				"stosw"
 				: /* no output */
 				:"a" (video_erase_char),
 				"c" ((video_num_lines-1)*video_num_columns>>1),
 				"D" (video_mem_start),
-				"S" (origin)
-				:"cx","di","si");
+				"S" (origin));
 			scr_end -= origin-video_mem_start;
 			pos -= origin-video_mem_start;
 			origin = video_mem_start;
@@ -452,23 +451,21 @@ static void scrup(int currcons, unsigned int t, unsigned int b)
 				: /* no output */
 				:"a" (video_erase_char),
 				"c" (video_num_columns),
-				"D" (scr_end-video_size_row)
-				:"cx","di");
+				"D" (scr_end-video_size_row));
 		}
 		set_origin(currcons);
 	} else {
 		__asm__("cld\n\t"
 			"rep\n\t"
 			"movsl\n\t"
-			"movl _video_num_columns,%%ecx\n\t"
+			"movl video_num_columns,%%ecx\n\t"
 			"rep\n\t"
 			"stosw"
 			: /* no output */
 			:"a" (video_erase_char),
 			"c" ((b-t-1)*video_num_columns>>1),
 			"D" (origin+video_size_row*t),
-			"S" (origin+video_size_row*(t+1))
-			:"cx","di","si");
+			"S" (origin+video_size_row*(t+1)));
 	}
 }
 
@@ -480,7 +477,7 @@ static void scrdown(int currcons, unsigned int t, unsigned int b)
 		"rep\n\t"
 		"movsl\n\t"
 		"addl $2,%%edi\n\t"	/* %edi has been decremented by 4 */
-		"movl _video_num_columns,%%ecx\n\t"
+		"movl video_num_columns,%%ecx\n\t"
 		"rep\n\t"
 		"stosw\n\t"
 		"cld"
@@ -488,8 +485,7 @@ static void scrdown(int currcons, unsigned int t, unsigned int b)
 		:"a" (video_erase_char),
 		"c" ((b-t-1)*video_num_columns>>1),
 		"D" (origin+video_size_row*b-4),
-		"S" (origin+video_size_row*(b-1)-4)
-		:"ax","cx","di","si");
+		"S" (origin+video_size_row*(b-1)-4));
 }
 
 static void lf(int currcons)
@@ -569,8 +565,7 @@ static void csi_J(int currcons, int vpar)
 		"stosw\n\t"
 		: /* no output */
 		:"c" (count),
-		"D" (start),"a" (video_erase_char)
-		:"cx","di");
+		"D" (start),"a" (video_erase_char));
 	need_wrap = 0;
 }
 
@@ -600,8 +595,7 @@ static void csi_K(int currcons, int vpar)
 		"stosw\n\t"
 		: /* no output */
 		:"c" (count),
-		"D" (start),"a" (video_erase_char)
-		:"cx","di");
+		"D" (start),"a" (video_erase_char));
 	need_wrap = 0;
 }
 
@@ -1336,8 +1330,7 @@ __asm__("cld\n\t"
 	"rep\n\t"
 	"stosw"
 	: /* no output */
-	:"a" (c),"D" (s),"c" (count)
-	:"cx","di");
+	:"a" (c),"D" (s),"c" (count));
 return s;
 }
 

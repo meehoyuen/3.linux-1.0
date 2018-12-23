@@ -16,10 +16,10 @@ __asm__ __volatile__ ("movl %%esp,%%eax\n\t" \
 	"mov %%ax,%%es\n\t" \
 	"mov %%ax,%%fs\n\t" \
 	"mov %%ax,%%gs" \
-	: /* no outputs */ :"i" (USER_DS), "i" (USER_CS):"ax")
+	: /* no outputs */ :"i" (USER_DS), "i" (USER_CS))
 
-#define sti() __asm__ __volatile__ ("sti": : :"memory")
-#define cli() __asm__ __volatile__ ("cli": : :"memory")
+#define sti() __asm__ __volatile__ ("sti": :)
+#define cli() __asm__ __volatile__ ("cli": :)
 #define nop() __asm__ __volatile__ ("nop")
 
 /*
@@ -32,8 +32,7 @@ __asm__ __volatile__ ( \
 	"orl $8,%%eax\n\t" \
 	"movl %%eax,%%cr0" \
 	: /* no outputs */ \
-	: /* no inputs */ \
-	:"ax")
+	: /* no inputs */)
 
 
 extern inline int tas(char * m)
@@ -45,12 +44,12 @@ extern inline int tas(char * m)
 }
 
 #define save_flags(x) \
-__asm__ __volatile__("pushfl ; popl %0":"=r" (x): /* no input */ :"memory")
+__asm__ __volatile__("pushfl ; popl %0":"=r" (x): /* no input */)
 
 #define restore_flags(x) \
-__asm__ __volatile__("pushl %0 ; popfl": /* no output */ :"r" (x):"memory")
+__asm__ __volatile__("pushl %0 ; popfl": /* no output */ :"r" (x))
 
-#define iret() __asm__ __volatile__ ("iret": : :"memory")
+#define iret() __asm__ __volatile__ ("iret": :)
 
 #define _set_gate(gate_addr,type,dpl,addr) \
 __asm__ __volatile__ ("movw %%dx,%%ax\n\t" \
@@ -60,8 +59,7 @@ __asm__ __volatile__ ("movw %%dx,%%ax\n\t" \
 	:"=m" (*((long *) (gate_addr))), \
 	 "=m" (*(1+(long *) (gate_addr))) \
 	:"i" ((short) (0x8000+(dpl<<13)+(type<<8))), \
-	 "d" ((char *) (addr)),"a" (KERNEL_CS << 16) \
-	:"ax","dx")
+	 "d" ((char *) (addr)),"a" (KERNEL_CS << 16))
 
 #define set_intr_gate(n,addr) \
 	_set_gate(&idt[n],14,0,addr)

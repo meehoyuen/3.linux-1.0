@@ -68,8 +68,7 @@ __asm__("cld\n\t"
 	"rep ; movsl\n\t"
 	"pop %%es"
 	: /* no outputs */
-	:"c" (n),"D" ((long) to),"S" ((long) from)
-	:"cx","di","si");
+	:"c" (n),"D" ((long) to),"S" ((long) from));
 }
 
 static inline void __constant_memcpy_tofs(void * to, const void * from, unsigned long n)
@@ -100,8 +99,7 @@ __asm__("cld\n\t" \
 	x \
 	"pop %%es" \
 	: /* no outputs */ \
-	:"c" (n/4),"D" ((long) to),"S" ((long) from) \
-	:"cx","di","si")
+	:"c" (n/4),"D" ((long) to),"S" ((long) from))
 
 	switch (n % 4) {
 		case 0:
@@ -132,8 +130,7 @@ __asm__("cld\n\t"
 	"2:\tshrl $2,%%ecx\n\t"
 	"rep ; fs ; movsl"
 	: /* no outputs */
-	:"c" (n),"D" ((long) to),"S" ((long) from)
-	:"cx","di","si","memory");
+	:"c" (n),"D" ((long) to),"S" ((long) from));
 }
 
 static inline void __constant_memcpy_fromfs(void * to, const void * from, unsigned long n)
@@ -160,8 +157,7 @@ __asm__("cld\n\t" \
 	"rep ; fs ; movsl\n\t" \
 	x \
 	: /* no outputs */ \
-	:"c" (n/4),"D" ((long) to),"S" ((long) from) \
-	:"cx","di","si","memory")
+	:"c" (n/4),"D" ((long) to),"S" ((long) from))
 
 	switch (n % 4) {
 		case 0:

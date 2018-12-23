@@ -121,19 +121,19 @@ int main(int argc, char ** argv)
 	if ((id=open(argv[1],O_RDONLY,0))<0)
 		die("Unable to open 'boot'");
 	if (read(id,buf,MINIX_HEADER) != MINIX_HEADER)
-		die("Unable to read header of 'boot'");
+		;//die("Unable to read header of 'boot'");
 	if (((long *) buf)[0]!=intel_long(0x04100301))
-		die("Non-Minix header of 'boot'");
+		;//die("Non-Minix header of 'boot'");
 	if (((long *) buf)[1]!=intel_long(MINIX_HEADER))
-		die("Non-Minix header of 'boot'");
+		;//die("Non-Minix header of 'boot'");
 	if (((long *) buf)[3] != 0)
-		die("Illegal data segment in 'boot'");
+		;//die("Illegal data segment in 'boot'");
 	if (((long *) buf)[4] != 0)
-		die("Illegal bss in 'boot'");
+		;//die("Illegal bss in 'boot'");
 	if (((long *) buf)[5] != 0)
-		die("Non-Minix header of 'boot'");
+		;//die("Non-Minix header of 'boot'");
 	if (((long *) buf)[7] != 0)
-		die("Illegal symbol table in 'boot'");
+		;//die("Illegal symbol table in 'boot'");
 	i=read(id,buf,sizeof buf);
 	fprintf(stderr,"Boot sector %d bytes.\n",i);
 	if (i != 512)
@@ -152,17 +152,17 @@ int main(int argc, char ** argv)
 	if (read(id,buf,MINIX_HEADER) != MINIX_HEADER)
 		die("Unable to read header of 'setup'");
 	if (((long *) buf)[0]!=intel_long(0x04100301))
-		die("Non-Minix header of 'setup'");
+		;//die("Non-Minix header of 'setup'");
 	if (((long *) buf)[1]!=intel_long(MINIX_HEADER))
-		die("Non-Minix header of 'setup'");
+		;//die("Non-Minix header of 'setup'");
 	if (((long *) buf)[3] != 0)
-		die("Illegal data segment in 'setup'");
+		;//die("Illegal data segment in 'setup'");
 	if (((long *) buf)[4] != 0)
-		die("Illegal bss in 'setup'");
+		;//die("Illegal bss in 'setup'");
 	if (((long *) buf)[5] != 0)
-		die("Non-Minix header of 'setup'");
+		;//die("Non-Minix header of 'setup'");
 	if (((long *) buf)[7] != 0)
-		die("Illegal symbol table in 'setup'");
+		;//die("Illegal symbol table in 'setup'");
 	for (i=0 ; (c=read(id,buf,sizeof buf))>0 ; i+=c )
 		if (write(1,buf,c)!=c)
 			die("Write call failed");
@@ -189,7 +189,7 @@ int main(int argc, char ** argv)
 	if (read(id,buf,GCC_HEADER) != GCC_HEADER)
 		die("Unable to read header of 'system'");
 	if (N_MAGIC(*ex) != ZMAGIC)
-		die("Non-GCC header of 'system'");
+		;//die("Non-GCC header of 'system'");
 	fprintf(stderr,"System is %d kB (%d kB code, %d kB data and %d kB bss)\n",
 		(ex->a_text+ex->a_data+ex->a_bss)/1024,
 		ex->a_text /1024,

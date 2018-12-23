@@ -21,8 +21,8 @@
 .text
 	.align 2
 
-.globl	_reg_div
-_reg_div:
+.globl	reg_div
+reg_div:
 	pushl	%ebp
 	movl	%esp,%ebp
 #ifdef REENTRANT_FPU
@@ -47,7 +47,7 @@ _reg_div:
 	cmpl	EXP_UNDER,EXP(%esi)
 	jg	xL_arg1_not_denormal
 
-	call	_denormal_operand
+	call	denormal_operand
 	orl	%eax,%eax
 	jnz	fpu_Arith_exit
 
@@ -55,7 +55,7 @@ xL_arg1_not_denormal:
 	cmpl	EXP_UNDER,EXP(%ebx)
 	jg	xL_arg2_not_denormal
 
-	call	_denormal_operand
+	call	denormal_operand
 	orl	%eax,%eax
 	jnz	fpu_Arith_exit
 
@@ -126,7 +126,7 @@ L_inf_valid:
 	cmpl	EXP_UNDER,EXP(%ebx)
 	jg	L_copy_arg1		/* Answer is Inf */
 
-	call	_denormal_operand
+	call	denormal_operand
 	orl	%eax,%eax
 	jnz	fpu_Arith_exit
 #endif DENORM_OPERAND
@@ -165,7 +165,7 @@ L_arg2_not_zero:
 	cmpl	EXP_UNDER,EXP(%esi)
 	jg	L_return_zero		/* Answer is zero */
 
-	call	_denormal_operand
+	call	denormal_operand
 	orl	%eax,%eax
 	jnz	fpu_Arith_exit
 #endif DENORM_OPERAND
@@ -185,7 +185,7 @@ L_arg2_not_inf:
 	cmpl	EXP_UNDER,EXP(%ebx)
 	jg	L_copy_arg1		/* Answer is zero */
 
-	call	_denormal_operand
+	call	denormal_operand
 	orl	%eax,%eax
 	jnz	fpu_Arith_exit
 #endif DENORM_OPERAND

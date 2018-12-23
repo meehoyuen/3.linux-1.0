@@ -9,7 +9,7 @@
 #define VERIFY_READ 0
 #define VERIFY_WRITE 1
 
-int __verify_write(unsigned long addr, unsigned long count);
+int verify_write(unsigned long addr, unsigned long count);
 
 extern inline int verify_area(int type, const void * addr, unsigned long size)
 {
@@ -19,7 +19,7 @@ extern inline int verify_area(int type, const void * addr, unsigned long size)
 		return -EFAULT;
 	if (wp_works_ok || type == VERIFY_READ || !size)
 		return 0;
-	return __verify_write((unsigned long) addr,size);
+	return verify_write((unsigned long) addr,size);
 }
 
 /*
@@ -114,10 +114,9 @@ extern inline unsigned long get_free_page(int priority)
 
 	page = __get_free_page(priority);
 	if (page)
-		__asm__ __volatile__("rep ; stosl"
+		__asm__ __volatile__("xorl %%eax,%%eax;movl $1024,%%ecx;movl %0,%%edi;rep ; stosl"
 			: /* no outputs */ \
-			:"a" (0),"c" (1024),"D" (page)
-			:"di","cx");
+			:"m" (page));
 	return page;
 }
 
@@ -177,7 +176,7 @@ extern int do_munmap(unsigned long, size_t);
 	rw_swap_page(WRITE,(nr),(buf))
 
 #define invalidate() \
-__asm__ __volatile__("movl %%cr3,%%eax\n\tmovl %%eax,%%cr3": : :"ax")
+__asm__ __volatile__("movl %%cr3,%%eax\n\tmovl %%eax,%%cr3":)
 
 extern unsigned long high_memory;
 

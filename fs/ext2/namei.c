@@ -59,8 +59,7 @@ static int ext2_match (int len, const char * const name,
 		"repe ; cmpsb\n\t"
 		"setz %0"
 		:"=q" (same)
-		:"S" ((long) name), "D" ((long) de->name), "c" (len)
-		:"cx", "di", "si");
+		:"S" ((long) name), "D" ((long) de->name), "c" (len));
 	return (int) same;
 }
 

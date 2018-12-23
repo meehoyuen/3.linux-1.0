@@ -83,8 +83,7 @@ int proc_match(int len,const char * name,struct proc_dir_entry * de)
 		"repe ; cmpsb\n\t"
 		"setz %%al"
 		:"=a" (same)
-		:"0" (0),"S" ((long) name),"D" ((long) de->name),"c" (len)
-		:"cx","di","si");
+		:"0" (0),"S" ((long) name),"D" ((long) de->name),"c" (len));
 	return same;
 }
 

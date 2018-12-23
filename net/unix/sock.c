@@ -328,7 +328,7 @@ unix_proto_create(struct socket *sock, int protocol)
   }
   upd->protocol = protocol;
   upd->socket = sock;
-  UN_DATA(sock) = upd;
+  sock->data = upd;
   upd->refcnt = 1;	/* Now its complete - bgm */
   dprintf(1, "UNIX: create: allocated data 0x%x\n", upd);
   return(0);
@@ -360,7 +360,7 @@ unix_proto_release(struct socket *sock, struct socket *peer)
 	iput(upd->inode);
 	upd->inode = NULL;
   }
-  UN_DATA(sock) = NULL;
+  sock->data = NULL;
   upd->socket = NULL;
   if (upd->peerupd) unix_data_deref(upd->peerupd);
   unix_data_deref(upd);

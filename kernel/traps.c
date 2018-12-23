@@ -146,8 +146,7 @@ asmlinkage void do_debug(struct pt_regs * regs, long error_code)
 	  /* If this is a kernel mode trap, then reset db7 and allow us to continue */
 	  __asm__("movl $0,%%edx\n\t" \
 		  "movl %%edx,%%db7\n\t" \
-		  : /* no output */ \
-		  : /* no input */ :"dx");
+		  : /* no output */);
 
 	  return;
 	};

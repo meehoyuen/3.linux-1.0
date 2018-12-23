@@ -105,10 +105,10 @@ FPU_denormal:
 .globl fpu_reg_round
 .globl fpu_reg_round_sqrt
 .globl fpu_Arith_exit
-.globl _round_reg
+.globl round_reg
 
 /* Entry point when called from C */
-_round_reg:
+round_reg:
 	pushl	%ebp
 	movl	%esp,%ebp
 	pushl	%esi
@@ -435,7 +435,7 @@ fpu_Arith_exit:
  */
 xL_precision_lost_up:
 	push	%eax
-	call	_set_precision_flag_up
+	call	set_precision_flag_up
 	popl	%eax
 	jmp	xL_no_precision_loss
 
@@ -445,7 +445,7 @@ xL_precision_lost_up:
  */
 xL_precision_lost_down:
 	push	%eax
-	call	_set_precision_flag_down
+	call	set_precision_flag_down
 	popl	%eax
 	jmp	xL_no_precision_loss
 
@@ -598,7 +598,7 @@ LNormalise_shift_done:
 	/* There must be a masked underflow */
 	push	%eax
 	pushl	EX_Underflow
-	call	_exception
+	call	exception
 	popl	%eax
 	popl	%eax
 	jmp	xL_Normalised
@@ -610,12 +610,12 @@ LNormalise_shift_done:
  */
 L_underflow_to_zero:
 	push	%eax
-	call	_set_precision_flag_down
+	call	set_precision_flag_down
 	popl	%eax
 
 	push	%eax
 	pushl	EX_Underflow
-	call	_exception
+	call	exception
 	popl	%eax
 	popl	%eax
 
@@ -628,7 +628,7 @@ L_underflow_to_zero:
 /* The operations resulted in a number too large to represent. */
 L_overflow:
 	push	%edi
-	call	_arith_overflow
+	call	arith_overflow
 	pop	%edi
 	jmp	fpu_reg_round_exit
 
