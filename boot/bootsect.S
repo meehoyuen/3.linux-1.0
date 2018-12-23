@@ -126,15 +126,15 @@ go:	mov	ax,cs
 	mov	fs,ax
 	mov	gs,ax
 	
-	xor	ah,ah			! reset FDC 
-	xor	dl,dl
+	xor	ah,ah			! reset driver
+	mov	dl,#0x80
 	int 	0x13	
 
 ! load the setup-sectors directly after the bootblock.
 ! Note that 'es' is already set up.
 
 load_setup:
-	xor	dx, dx			! drive 0, head 0
+	mov	dx,#0x0080		! drive 0x80, head 0
 	mov	cx,#0x0002		! sector 2, track 0
 	mov	bx,#0x0200		! address = 512, in INITSEG
 	mov	ax,#0x0200+SETUPSECS	! service 2, nr of sectors
@@ -148,7 +148,7 @@ load_setup:
 	call	print_hex
 	pop	ax	
 	
-	xor	dl, dl			! reset FDC
+	mov     dl, #0x80		! reset driver
 	xor	ah, ah
 	int	0x13
 	jmp	load_setup
@@ -163,7 +163,7 @@ ok_load_setup:
 ! disks.  It doesn't work for one of my BIOS's (1987 Award).  It was
 ! fatal not to check the error code.
 
-	xor	dl,dl
+	mov	dl,#0x80
 	mov	ah,#0x08		! AH=8 is get drive parameters
 	int	0x13
 	xor	ch,ch
@@ -173,7 +173,7 @@ ok_load_setup:
 ! 18 sectors if sector 18 can be read, 15 if sector 15 can be read.
 ! Otherwise guess 9.
 
-	xor	dx, dx			! drive 0, head 0
+	mov	dx,#0x0080		! drive 0x80, head 0
 	mov	cx,#0x0012		! sector 18, track 0
 	mov	bx,#0x0200+SETUPSECS*0x200  ! address after setup (es = cs)
 	mov	ax,#0x0201		! service 2, 1 sector
@@ -211,30 +211,10 @@ got_sectors:
 	mov	ax,#SYSSEG
 	mov	es,ax		! segment of 0x010000
 	call	read_it
-	call	kill_motor
 	call	print_nl
-
-! After that we check which root-device to use. If the device is
-! defined (!= 0), nothing is done and the given device is used.
-! Otherwise, either /dev/PS0 (2,28) or /dev/at0 (2,8), depending
-! on the number of sectors that the BIOS reports currently.
 
 	seg cs
 	mov	ax,root_dev
-	or	ax,ax
-	jne	root_defined
-	seg cs
-	mov	bx,sectors
-	mov	ax,#0x0208		! /dev/ps0 - 1.2Mb
-	cmp	bx,#15
-	je	root_defined
-	mov	ax,#0x021c		! /dev/PS0 - 1.44Mb
-	cmp	bx,#18
-	je	root_defined
-	mov	ax,#0x0200		! /dev/fd0 - autodetect
-root_defined:
-	seg cs
-	mov	root_dev,ax
 
 ! after that (everyting loaded), we jump to
 ! the setup-routine loaded directly after
@@ -314,7 +294,8 @@ read_track:
 	mov	ch,dl
 	mov	dx,head
 	mov	dh,dl
-	and	dx,#0x0100
+	and	dh,#0x01
+        mov     dl,#0x80
 	mov	ah,#2
 	
 	push	dx				! save for error dump
@@ -333,7 +314,7 @@ bad_rt:	push	ax				! save error code
 	
 	
 	xor ah,ah
-	xor dl,dl
+	mov dl,#0x80
 	int 0x13
 	
 
@@ -410,20 +391,6 @@ print_digit:
 good_digit:
 	int	0x10
 	loop	print_digit
-	ret
-
-
-/*
- * This procedure turns off the floppy drive motor, so
- * that we enter the kernel in a known state, and
- * don't have to worry about it later.
- */
-kill_motor:
-	push dx
-	mov dx,#0x3f2
-	xor al, al
-	outb
-	pop dx
 	ret
 
 sectors:
