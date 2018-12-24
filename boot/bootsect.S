@@ -155,41 +155,7 @@ load_setup:
 
 ok_load_setup:
 
-! Get disk drive parameters, specifically nr of sectors/track
-
-#if 0
-
-! bde - the Phoenix BIOS manual says function 0x08 only works for fixed
-! disks.  It doesn't work for one of my BIOS's (1987 Award).  It was
-! fatal not to check the error code.
-
-	mov	dl,#0x80
-	mov	ah,#0x08		! AH=8 is get drive parameters
-	int	0x13
-	xor	ch,ch
-#else
-
-! It seems that there is no BIOS call to get the number of sectors.  Guess
-! 18 sectors if sector 18 can be read, 15 if sector 15 can be read.
-! Otherwise guess 9.
-
-	mov	dx,#0x0080		! drive 0x80, head 0
-	mov	cx,#0x0012		! sector 18, track 0
-	mov	bx,#0x0200+SETUPSECS*0x200  ! address after setup (es = cs)
-	mov	ax,#0x0201		! service 2, 1 sector
-	int	0x13
-	jnc	got_sectors
-	mov	cl,#0x0f		! sector 15
-	mov	ax,#0x0201		! service 2, 1 sector
-	int	0x13
-	jnc	got_sectors
-	mov	cl,#0x09
-
-#endif
-
-got_sectors:
 	seg cs
-	mov	sectors,cx
 	mov	ax,#INITSEG
 	mov	es,ax
 
@@ -250,34 +216,41 @@ ok1_read:
 	mov cx,ax
 	shl cx,#9
 	add cx,bx
-	jnc ok2_read
-	je ok2_read
+	jnc ok2_read  !<64k
+	je ok2_read   !=64k
 	xor ax,ax
 	sub ax,bx
-	shr ax,#9
+	shr ax,#9     !>64k, ax=(64k-bx)>>9
 ok2_read:
+ 	cmp al,#0x28  	!we read no more than 40sectors one time
+        jl read40s
+	mov al,#0x28
+read40s:
 	call read_track
 	mov cx,ax
 	add ax,sread
 	seg cs
-	cmp ax,sectors
-	jne ok3_read
-	mov ax,#1
-	sub ax,head
-	jne ok4_read
-	inc track
-ok4_read:
-	mov head,ax
-	xor ax,ax
-ok3_read:
 	mov sread,ax
+	cmp ax,sectors
+	jc  ok3_read    !head need inc?
+	sub ax,sectors  !sread-=63
+	mov sread,ax
+	mov ax,head
+	inc ax
+	mov head,ax     !head++ 
+	cmp ax,heads    !track need inc?
+	jc ok3_read
+	xor ax,ax
+	mov head,ax	!head=0
+	inc track
+ok3_read:
 	shl cx,#9
 	add bx,cx
-	jnc rp_read
+	jnc rp_read   !less than 64k, repeat read
 	mov ax,es
-	add ah,#0x10
+	add ah,#0x10  !es add 0x1000
 	mov es,ax
-	xor bx,bx
+	xor bx,bx     !bx=0
 	jmp rp_read
 
 read_track:
@@ -294,7 +267,6 @@ read_track:
 	mov	ch,dl
 	mov	dx,head
 	mov	dh,dl
-	and	dh,#0x01
         mov     dl,#0x80
 	mov	ah,#2
 	
@@ -394,7 +366,8 @@ good_digit:
 	ret
 
 sectors:
-	.word 0
+	.word 0x3f 	!63sectors per head
+heads:	.word 0x10	!16heads per track
 
 msg1:
 	.byte 13,10
