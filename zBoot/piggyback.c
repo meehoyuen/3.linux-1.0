@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 	char tmp_buf[512*1024];
 	
 	struct exec obj = {0x00640107};	/* object header */
-	char string_names[] = {"_input_data\0_input_len\0"};
+	char string_names[] = {"input_data\0\0input_len\0"}; /*why???ridiculous!!!*/
 
 	struct nlist var_names[2] = /* Symbol table */
 		{	

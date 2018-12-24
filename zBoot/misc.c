@@ -50,8 +50,8 @@ unsigned outcnt;
 unsigned insize;
 unsigned inptr;
 
-char input_data[];
-int input_len;
+extern char input_data[];
+extern int input_len;
 
 int input_ptr;
 

@@ -1,11 +1,11 @@
 #config_interface: textconfig
-config_interface: wx
+#config_interface: wx
 
 #display_library: nogui
-#display_library: sdl, options="fullscreen" # startup in fullscreen mode
+display_library: sdl, options="fullscreen" # startup in fullscreen mode
 #display_library: term
 #display_library: wx
-display_library: x, options="hideIPS" # disable IPS output in status bar
+#display_library: x, options="hideIPS" # disable IPS output in status bar
 #display_library: x, options="gui_debug" # use GTK debugger gui
 
 #  2.3.7 3.2Ghz Intel Core 2 Q9770 with WinXP/g++ 3.4    50 to 55 Mips
