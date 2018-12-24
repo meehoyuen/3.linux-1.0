@@ -9,6 +9,7 @@
  */
 
 .text
+.globl startup_32
 .globl idt,gdt,
 .globl swapper_pg_dir,pg0
 .globl empty_bad_page

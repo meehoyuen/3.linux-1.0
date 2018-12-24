@@ -19,7 +19,7 @@
 .text
 
 #include <linux/segment.h>
-
+.globl startup_32
 startup_32:
 	cld
 	cli

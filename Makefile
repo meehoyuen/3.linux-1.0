@@ -71,7 +71,7 @@ LD86	=ld86 -0
 AS	=as --32
 LD	=ld -m elf_i386
 LDFLAGS	=#-qmagic
-HOSTCC	=gcc
+HOSTCC	=gcc -m32 #must m32, or tools/build runs badly,because elf header size wrong!
 CC	=gcc -m32 -D__KERNEL__
 MAKE	=make
 CPP	=$(CC) -m32 -E -I$(LINUXPATH)/include
@@ -146,7 +146,7 @@ init/main.o: $(CONFIGURE) init/main.c
 	$(CC) $(CFLAGS) $(PROFILING) -c -o $*.o $<
 
 tools/system:	boot/head.o init/main.o tools/version.o linuxsubdirs
-	$(LD) $(LDFLAGS) -Ttext 1000 boot/head.o init/main.o tools/version.o \
+	$(LD) $(LDFLAGS) -Ttext 0x1000 -e startup_32 boot/head.o init/main.o tools/version.o \
 		$(ARCHIVES) \
 		$(FILESYSTEMS) \
 		$(DRIVERS) \
@@ -195,7 +195,7 @@ zlilo: $(CONFIGURE) zImage
 	if [ -x /sbin/lilo ]; then /sbin/lilo; else /etc/lilo/install; fi
 
 tools/zSystem:	boot/head.o init/main.o tools/version.o linuxsubdirs
-	$(LD) $(LDFLAGS) -Ttext 100000 boot/head.o init/main.o tools/version.o \
+	$(LD) $(LDFLAGS) -Ttext 0x100000 -e startup_32 boot/head.o init/main.o tools/version.o \
 		$(ARCHIVES) \
 		$(FILESYSTEMS) \
 		$(DRIVERS) \

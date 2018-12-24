@@ -18,14 +18,14 @@ CFLAGS = -O2 -m32 -fno-stack-protector -DSTDC_HEADERS $(TEST)
 all:	zSystem
 
 zSystem:piggy.o $(zOBJECTS)
-	$(LD) $(LDFLAGS) -o zSystem -Ttext 1000 $(zOBJECTS) piggy.o
+	$(LD) $(LDFLAGS) -o zSystem -Ttext 0x1000 -e startup_32 $(zOBJECTS) piggy.o
 
 head.o:	head.s
 
 head.s: head.S ../include/linux/tasks.h
 	$(CPP) -traditional head.S -o head.s
 xtract: xtract.c
-	$(CC) -O2 -DSTDC_HEADERS -o $@ $<
+	$(CC) -o $@ $<
 piggy.o: $(SYSTEM) xtract piggyback
 	./xtract $(SYSTEM) | gzip -9 | ./piggyback > piggy.o
 

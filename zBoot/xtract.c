@@ -15,7 +15,7 @@
 #include <sys/sysmacros.h>
 #include <unistd.h>	/* contains read/write */
 #include <fcntl.h>
-#include <a.out.h>
+#include "../include/linux/elf.h"
 
 #define GCC_HEADER 1024
 
@@ -34,47 +34,57 @@ void usage(void)
 
 int main(int argc, char ** argv)
 {
-	int i,c,id, sz;
+	int i,c,id,sz,total_sz=0;
 	char buf[1024];
+	char buff[1024];
 	char major_root, minor_root;
 	struct stat sb;
 
-	struct exec *ex = (struct exec *)buf;
+	struct elfhdr *hdr= (struct elfhdr*)buf;
 
-	if (argc  != 2)
+	if (argc != 2)
 		usage();
-	
+
 	if ((id=open(argv[1],O_RDONLY,0))<0)
 		die("Unable to open 'system'");
+
 	if (read(id,buf,GCC_HEADER) != GCC_HEADER)
 		die("Unable to read header of 'system'");
-	if (N_MAGIC(*ex) != ZMAGIC)
-		;//die("Non-GCC header of 'system'");
-
-	sz = N_SYMOFF(*ex) - GCC_HEADER + 4;	/* +4 to get the same result than tools/build */
-
-	fprintf(stderr, "System size is %d\n", sz);
-
-	while (sz)
+fprintf(stderr,"phnum:%d\n",hdr->e_phnum);
+	struct elf_phdr *phdr=&buf[hdr->e_phoff];
+	for(i=0; i<hdr->e_phnum;i++,phdr++)
 	{
-		int l, n;
+fprintf(stderr,"type:0x%x,size:0x%x,off:0x%x,va:0x%x,pa:0x%x\n",phdr->p_type,phdr->p_filesz,phdr->p_offset,phdr->p_vaddr,phdr->p_paddr);
+		if (!phdr->p_type || !phdr->p_filesz)
+			continue;
+		sz = phdr->p_filesz;
+		if((phdr->p_vaddr+sz-0x100000)>total_sz)
+			total_sz=(phdr->p_vaddr+sz-0x100000);
+   		lseek(id,phdr->p_offset,SEEK_SET);
+   		lseek(1,phdr->p_vaddr-0x100000,SEEK_SET);
 
-		l = sz;
-		if (l > sizeof(buf)) l = sizeof(buf);
-
-		if ((n=read(id, buf, l)) !=l)
+		while (sz)
 		{
-			if (n == -1) 
-			   perror(argv[1]);
-			else
-			   fprintf(stderr, "Unexpected EOF\n");
+			int l, n;
 
-			die("Can't read system");
+			l = sz;
+			if (l > sizeof(buff)) l = sizeof(buff);
+
+			if ((n=read(id, buff, l)) !=l)
+			{
+				if (n == -1) 
+			   		perror(argv[1]);
+				else
+			   		fprintf(stderr, "Unexpected EOF\n");
+
+				die("Can't read system");
+			}
+
+			write(1, buff, l);
+			sz -= l;
 		}
-
-		write(1, buf, l);
-		sz -= l;
 	}
+	fprintf(stderr, "System size is %d\n", total_sz);
 
 	close(id);
 	return(0);

@@ -28,8 +28,8 @@
 #include <sys/sysmacros.h>
 #include <unistd.h>	/* contains read/write */
 #include <fcntl.h>
-#include <linux/config.h>
-#include <linux/a.out.h>
+#include "../include/linux/config.h"
+#include "../include/linux/elf.h"
 
 #define MINIX_HEADER 32
 #define GCC_HEADER 1024
@@ -84,10 +84,11 @@ void usage(void)
 
 int main(int argc, char ** argv)
 {
-	int i,c,id, sz;
+	int i,c,id,sz,total_sz=0;
 	unsigned long sys_size;
 	char buf[1024];
-	struct exec *ex = (struct exec *)buf;
+	char buff[1024];
+	struct elfhdr *hdr = (struct elfhdr*)buf;
 	char major_root, minor_root;
 	struct stat sb;
 
@@ -162,42 +163,56 @@ int main(int argc, char ** argv)
 	
 	if ((id=open(argv[3],O_RDONLY,0))<0)
 		die("Unable to open 'system'");
+
 	if (read(id,buf,GCC_HEADER) != GCC_HEADER)
 		die("Unable to read header of 'system'");
-	if (N_MAGIC(*ex) != ZMAGIC)
-		;//die("Non-GCC header of 'system'");
-	fprintf(stderr,"System is %d kB (%d kB code, %d kB data and %d kB bss)\n",
-		(ex->a_text+ex->a_data+ex->a_bss)/1024,
-		ex->a_text /1024,
-		ex->a_data /1024,
-		ex->a_bss  /1024);
-	sz = N_SYMOFF(*ex) - GCC_HEADER + 4;
-	sys_size = (sz + 15) / 16;
-	if (sys_size > SYS_SIZE)
-		die("System is too big");
-	while (sz > 0) {
-		int l, n;
+	fprintf(stderr,"phnum:%hd\n",hdr->e_phnum);
+	struct elf_phdr *phdr=&buf[hdr->e_phoff];
+        for(i=0; i<hdr->e_phnum;i++,phdr++)
+        {
+		fprintf(stderr,"type:0x%x,size:0x%x,off:0x%x,va:0x%x,pa:0x%x\n",
+			phdr->p_type,phdr->p_filesz,phdr->p_offset,phdr->p_vaddr,phdr->p_paddr);
+                if (!phdr->p_type || !phdr->p_filesz)
+                        continue;
+                sz = phdr->p_filesz;
+                if((phdr->p_vaddr+sz-0x1000)>total_sz)
+                        total_sz=(phdr->p_vaddr+sz-0x1000);
+                lseek(id,phdr->p_offset,SEEK_SET);
+                lseek(1,phdr->p_vaddr+(SETUP_SECTS-7)*512,SEEK_SET);
 
-		l = sz;
-		if (l > sizeof(buf))
-			l = sizeof(buf);
-		if ((n=read(id, buf, l)) != l) {
-			if (n == -1) 
-				perror(argv[1]);
-			else
-				fprintf(stderr, "Unexpected EOF\n");
-			die("Can't read 'system'");
+		while (sz > 0)
+		{
+			int l, n;
+
+			l = sz;
+			if (l > sizeof(buff))
+				l = sizeof(buff);
+			if ((n=read(id, buff, l)) != l) {
+				if (n == -1) 
+					perror(argv[1]);
+				else
+					fprintf(stderr, "Unexpected EOF\n");
+				die("Can't read 'system'");
+			}
+			if (write(1, buff, l) != l)
+				die("Write failed");
+			sz -= l;
 		}
-		if (write(1, buf, l) != l)
-			die("Write failed");
-		sz -= l;
 	}
 	close(id);
+
+	sys_size = (total_sz + 15) / 16;
+	fprintf(stderr,"System is %d kB\n", total_sz/1024);
+
 	if (lseek(1,500,0) == 500) {
 		buf[0] = (sys_size & 0xff);
 		buf[1] = ((sys_size >> 8) & 0xff);
 		if (write(1, buf, 2) != 2)
 			die("Write failed");
 	}
+
+	if (sys_size > SYS_SIZE)
+		die("System is too big");
+
 	return(0);
 }
