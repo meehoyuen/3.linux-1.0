@@ -372,6 +372,9 @@ heads:	.word 0x10	!16heads per track
 msg1:
 	.byte 13,10
 	.ascii "Loading"
+.org 446
+part_tbl:
+	.byte 0 	!reserved for partition table, no more than 3 pt.
 
 .org 498
 root_flags:

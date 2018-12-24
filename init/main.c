@@ -224,7 +224,7 @@ int checksetup(char *line)
 	return(1);
 }
 
-unsigned long loops_per_sec = 1;
+unsigned long loops_per_sec = 10000000;
 
 static void calibrate_delay(void)
 {
@@ -246,6 +246,7 @@ static void calibrate_delay(void)
 				(loops_per_sec/5000) % 100);
 			return;
 		}
+		__delay(1); //code optimize bug??!!
 	}
 	printk("failed\n");
 }

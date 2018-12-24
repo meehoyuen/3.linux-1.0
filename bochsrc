@@ -2,8 +2,8 @@
 #config_interface: wx
 
 #display_library: nogui
-display_library: sdl, options="fullscreen" # startup in fullscreen mode
-#display_library: term
+#display_library: sdl, options="fullscreen" # startup in fullscreen mode
+display_library: term
 #display_library: wx
 #display_library: x, options="hideIPS" # disable IPS output in status bar
 #display_library: x, options="gui_debug" # use GTK debugger gui
