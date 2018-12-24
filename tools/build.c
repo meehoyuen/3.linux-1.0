@@ -170,13 +170,14 @@ int main(int argc, char ** argv)
 	struct elf_phdr *phdr=&buf[hdr->e_phoff];
         for(i=0; i<hdr->e_phnum;i++,phdr++)
         {
-		fprintf(stderr,"type:0x%x,size:0x%x,off:0x%x,va:0x%x,pa:0x%x\n",
-			phdr->p_type,phdr->p_filesz,phdr->p_offset,phdr->p_vaddr,phdr->p_paddr);
-                if (!phdr->p_type || !phdr->p_filesz)
+		fprintf(stderr,"type:0x%x,size:0x%x,msize:0x%x,off:0x%x,va:0x%x,pa:0x%x\n",
+			phdr->p_type,phdr->p_filesz,phdr->p_memsz,
+			phdr->p_offset,phdr->p_vaddr,phdr->p_paddr);
+                if (!phdr->p_type || !phdr->p_memsz)
                         continue;
                 sz = phdr->p_filesz;
-                if((phdr->p_vaddr+sz-0x1000)>total_sz)
-                        total_sz=(phdr->p_vaddr+sz-0x1000);
+                if((phdr->p_vaddr+phdr->p_memsz-0x1000)>total_sz)
+                        total_sz=(phdr->p_vaddr+phdr->p_memsz-0x1000);
                 lseek(id,phdr->p_offset,SEEK_SET);
                 lseek(1,phdr->p_vaddr+(SETUP_SECTS-7)*512,SEEK_SET);
 
@@ -197,6 +198,19 @@ int main(int argc, char ** argv)
 			if (write(1, buff, l) != l)
 				die("Write failed");
 			sz -= l;
+		}
+                sz = phdr->p_filesz;
+		memset(buff,0,sizeof(buff));
+		while (sz<phdr->p_memsz)
+		{
+			int l, n;
+
+			l = phdr->p_memsz - sz;
+			if (l > sizeof(buff))
+				l = sizeof(buff);
+			if (write(1, buff, l) != l)
+				die("Write failed");
+			sz += l;
 		}
 	}
 	close(id);

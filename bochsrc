@@ -51,8 +51,9 @@ boot: disk
 #boot: cdrom
 #boot: ac
 
-log: /dev/stdout
+#log: /dev/stdout
 #log: /dev/null
+log: log
 #log: /tmp/bochsout.txt
 
 #logprefix: %t-%e-@%i-%d

@@ -27,6 +27,7 @@ head.s: head.S ../include/linux/tasks.h
 xtract: xtract.c
 	$(CC) -o $@ $<
 piggy.o: $(SYSTEM) xtract piggyback
+	./xtract $(SYSTEM) > ../vmlinux
 	./xtract $(SYSTEM) | gzip -9 | ./piggyback > piggy.o
 
 $(SYSTEM):
