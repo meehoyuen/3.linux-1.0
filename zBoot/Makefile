@@ -27,8 +27,10 @@ head.s: head.S ../include/linux/tasks.h
 xtract: xtract.c
 	$(CC) -o $@ $<
 piggy.o: $(SYSTEM) xtract piggyback
-	./xtract $(SYSTEM) > ../vmlinux
-	./xtract $(SYSTEM) | gzip -9 | ./piggyback > piggy.o
+	./xtract $(SYSTEM) > zSystem.tmp
+	cat zSystem.tmp | gzip -9 | ./piggyback > piggy.o
+	# Note:lseek(sparse file) for pipe to gzip doesn't work properly!
+	#./xtract $(SYSTEM) | gzip -9 | ./piggyback > piggy.o
 
 $(SYSTEM):
 	$(MAKE) -C .. tools/zSystem
