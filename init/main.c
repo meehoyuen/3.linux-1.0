@@ -355,7 +355,19 @@ static void copro_timeout(void)
 	outb_p(0,0xf1);
 	outb_p(0,0xf0);
 }
+static int printf(const char *fmt, ...)
+{
+	va_list args;
+	int i;
 
+	va_start(args, fmt);
+	write(1,printbuf,i=vsprintf(printbuf, fmt, args));
+	va_end(args);
+	return i;
+}
+extern char *p000;
+extern char p111[];
+extern char *p222;
 asmlinkage void start_kernel(void)
 {
 /*
@@ -402,7 +414,7 @@ asmlinkage void start_kernel(void)
 	memory_start = chr_dev_init(memory_start,memory_end);
 	memory_start = blk_dev_init(memory_start,memory_end);
 	sti();
-	calibrate_delay();
+	//calibrate_delay();
 #ifdef CONFIG_INET
 	memory_start = net_dev_init(memory_start,memory_end);
 #endif
@@ -411,10 +423,26 @@ asmlinkage void start_kernel(void)
 #endif
 	memory_start = inode_init(memory_start,memory_end);
 	memory_start = file_table_init(memory_start,memory_end);
+printk("p000:%c\n",p000[0]);
+printk("p111:%c\n",p111[0]);
+printk("p222:%c\n",p222[0]);
+	printk("low:%x, start:%x, end:%x\n",low_memory_start,memory_start,memory_end);
 	mem_init(low_memory_start,memory_start,memory_end);
+printk("1p000:%c\n",p000[0]);
+printk("p111:%c\n",p111[0]);
+printk("p222:%c\n",p222[0]);
 	buffer_init();
+printk("2p000:%c\n",p000[0]);
+printk("p111:%c\n",p111[0]);
+printk("p222:%c\n",p222[0]);
 	time_init();
 	floppy_init();
+printk("3p000:%c\n",p000[0]);
+printk("p111:%c\n",p111[0]);
+printk("p222:%c\n",p222[0]);
+printk("p000:%x->%x\n",&p000,p000);
+printk("p111:%x->%x\n",&p111,p111);
+printk("p222:%x->%x\n",&p222,p222);
 	sock_init();
 #ifdef CONFIG_SYSVIPC
 	ipc_init();
@@ -430,7 +458,7 @@ asmlinkage void start_kernel(void)
 	 * So the irq13 will happen eventually, but the exception 16
 	 * should get there first..
 	 */
-	if (hard_math) {
+	if (0 & hard_math) {
 		unsigned short control_word;
 
 		printk("Checking 386/387 coupling... ");
@@ -451,7 +479,7 @@ asmlinkage void start_kernel(void)
 	else {
 		printk("No coprocessor found and no math emulation present.\n");
 		printk("Giving up.\n");
-		for (;;) ;
+		//for (;;) ;
 	}
 #endif
 
@@ -459,8 +487,14 @@ asmlinkage void start_kernel(void)
 	printk(linux_banner);
 
 	move_to_user_mode();
+printf("moved to user\n");
+//asm volatile("push %%ebx;again:cmpl $88,%%ebx; jne again;pop %%ebx":);
 	if (!fork())		/* we count on this going ok */
+	{
+		printf("forked process\n");
 		init();
+	}else
+	printf("parent process\n");
 /*
  * task[0] is meant to be used as an "idle" task: it may not sleep, but
  * it might do some general things like count free pages or it could be
@@ -474,16 +508,6 @@ asmlinkage void start_kernel(void)
 		idle();
 }
 
-static int printf(const char *fmt, ...)
-{
-	va_list args;
-	int i;
-
-	va_start(args, fmt);
-	write(1,printbuf,i=vsprintf(printbuf, fmt, args));
-	va_end(args);
-	return i;
-}
 
 void init(void)
 {

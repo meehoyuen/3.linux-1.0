@@ -1856,7 +1856,7 @@ static struct proto_ops inet_proto_ops = {
 };
 
 extern unsigned long seq_offset;
-
+extern char*p000,*p111,*p222;
 /* Called by ddi.c on kernel startup.  */
 void inet_proto_init(struct ddi_proto *pro)
 {
@@ -1870,7 +1870,6 @@ void inet_proto_init(struct ddi_proto *pro)
 					pro->name, AF_INET_MAJOR);
 	return;
   }
-
   /* Tell SOCKET that we are alive... */
   (void) sock_register(inet_proto_ops.family, &inet_proto_ops);
 
@@ -1888,7 +1887,6 @@ void inet_proto_init(struct ddi_proto *pro)
 
 	tmp = (struct inet_protocol *) p->next;
 	inet_add_protocol(p);
-	printk("%s%s",p->name,tmp?", ":"\n");
 	p = tmp;
   }
 

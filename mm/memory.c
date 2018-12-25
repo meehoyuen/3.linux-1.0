@@ -891,8 +891,10 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long error_code)
 
 	/* get the address */
 	__asm__("movl %%cr2,%0":"=r" (address));
+printk("page fault addr:%x\n",address);
 	if (address < TASK_SIZE) {
 		if (error_code & 4) {	/* user mode access? */
+printk("page fault addr:%x user mode\n",address);
 			if (regs->eflags & VM_MASK) {
 				bit = (address - 0xA0000) >> PAGE_SHIFT;
 				if (bit < 32)
@@ -901,12 +903,19 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long error_code)
 				user_esp = regs->esp;
 		}
 		if (error_code & 1)
+{
+printk("page fault addr:%x write protected\n",address);
 			do_wp_page(error_code, address, current, user_esp);
+}
 		else
+{
+printk("page fault addr:%x no page\n",address);
 			do_no_page(error_code, address, current, user_esp);
+}
 		return;
 	}
 	address -= TASK_SIZE;
+printk("wp_works_ok:%x,present:%x\n",wp_works_ok,error_code & PAGE_PRESENT);
 	if (wp_works_ok < 0 && address == 0 && (error_code & PAGE_PRESENT)) {
 		wp_works_ok = 1;
 		pg0[0] = PAGE_SHARED;
@@ -1103,8 +1112,10 @@ void mem_init(unsigned long start_low_mem,
 /* test if the WP bit is honoured in supervisor mode */
 	wp_works_ok = -1;
 	pg0[0] = PAGE_READONLY;
+printk("mem_map:%x, pg0:%x\n", mem_map, pg0);
 	invalidate();
 	__asm__ __volatile__("movb 0,%%al ; movb %%al,0":);
+//asm volatile("jmp .");
 	pg0[0] = 0;
 	invalidate();
 	if (wp_works_ok < 0)
