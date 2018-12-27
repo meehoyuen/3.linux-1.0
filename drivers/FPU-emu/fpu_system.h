@@ -61,6 +61,6 @@
 #endif
 
 /* ######## temporary and ugly ;-) */
-#define FPU_data_address        ((void *)(I387.soft.twd))
+#define FPU_data_address        (I387.soft.twd)
 
 #endif

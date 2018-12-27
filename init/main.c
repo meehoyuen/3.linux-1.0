@@ -365,9 +365,6 @@ static int printf(const char *fmt, ...)
 	va_end(args);
 	return i;
 }
-extern char *p000;
-extern char p111[];
-extern char *p222;
 asmlinkage void start_kernel(void)
 {
 /*
@@ -423,26 +420,11 @@ asmlinkage void start_kernel(void)
 #endif
 	memory_start = inode_init(memory_start,memory_end);
 	memory_start = file_table_init(memory_start,memory_end);
-printk("p000:%c\n",p000[0]);
-printk("p111:%c\n",p111[0]);
-printk("p222:%c\n",p222[0]);
 	printk("low:%x, start:%x, end:%x\n",low_memory_start,memory_start,memory_end);
 	mem_init(low_memory_start,memory_start,memory_end);
-printk("1p000:%c\n",p000[0]);
-printk("p111:%c\n",p111[0]);
-printk("p222:%c\n",p222[0]);
 	buffer_init();
-printk("2p000:%c\n",p000[0]);
-printk("p111:%c\n",p111[0]);
-printk("p222:%c\n",p222[0]);
 	time_init();
 	floppy_init();
-printk("3p000:%c\n",p000[0]);
-printk("p111:%c\n",p111[0]);
-printk("p222:%c\n",p222[0]);
-printk("p000:%x->%x\n",&p000,p000);
-printk("p111:%x->%x\n",&p111,p111);
-printk("p222:%x->%x\n",&p222,p222);
 	sock_init();
 #ifdef CONFIG_SYSVIPC
 	ipc_init();
@@ -458,7 +440,7 @@ printk("p222:%x->%x\n",&p222,p222);
 	 * So the irq13 will happen eventually, but the exception 16
 	 * should get there first..
 	 */
-	if (0 & hard_math) {
+	if (hard_math) {
 		unsigned short control_word;
 
 		printk("Checking 386/387 coupling... ");
@@ -472,14 +454,14 @@ printk("p222:%x->%x\n",&p222,p222);
 		__asm__("fldz ; fld1 ; fdiv %st,%st(1) ; fwait");
 		timer_active &= ~(1<<COPRO_TIMER);
 		if (!fpu_error)
-			printk("Ok, fpu using %s error reporting.\n",
+			printk("Ok, fpu using %x error reporting.\n",
 				ignore_irq13?"exception 16":"irq13");
 	}
 #ifndef CONFIG_MATH_EMULATION
 	else {
 		printk("No coprocessor found and no math emulation present.\n");
 		printk("Giving up.\n");
-		//for (;;) ;
+		for (;;) ;
 	}
 #endif
 
@@ -487,14 +469,11 @@ printk("p222:%x->%x\n",&p222,p222);
 	printk(linux_banner);
 
 	move_to_user_mode();
-printf("moved to user\n");
 //asm volatile("push %%ebx;again:cmpl $88,%%ebx; jne again;pop %%ebx":);
-	if (!fork())		/* we count on this going ok */
+	if (1/*!fork()*/)		/* we count on this going ok */
 	{
-		printf("forked process\n");
 		init();
-	}else
-	printf("parent process\n");
+	}
 /*
  * task[0] is meant to be used as an "idle" task: it may not sleep, but
  * it might do some general things like count free pages or it could be

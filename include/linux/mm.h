@@ -113,7 +113,7 @@ extern inline unsigned long get_free_page(int priority)
 	unsigned long page;
 
 	page = __get_free_page(priority);
-	printk("get free page:%d\n",page);
+	printk("get free page:0x%x\n",page);
 	if (page)
 	{
 		int i=0;

@@ -36,7 +36,7 @@ endif
 # the default of FLOPPY is used by 'build'.
 #
 
-ROOT_DEV = CURRENT
+ROOT_DEV =
 
 #
 # If you want to preset the SVGA mode, uncomment the next line and
@@ -184,9 +184,9 @@ zdisk: zImage
 	dd bs=8192 if=zImage of=/dev/fd0
 
 bochs: zImage c.img
-	dd bs=1 if=c.img of=/tmp/mbr.pt seek=446 skip=446 count=48
+	@dd bs=1 if=c.img of=/tmp/mbr.pt seek=446 skip=446 count=48 2> /dev/null
 	dd bs=8192 if=zImage of=c.img conv=notrunc
-	dd bs=1 if=/tmp/mbr.pt of=c.img seek=446 skip=446 count=48 conv=notrunc
+	@dd bs=1 if=/tmp/mbr.pt of=c.img seek=446 skip=446 count=48 conv=notrunc 2> /dev/null
 c.img:
 	dd bs=512 if=/dev/zero of=c.img count=163296 #162*16*63*512=80M
 	./mkimg.sh

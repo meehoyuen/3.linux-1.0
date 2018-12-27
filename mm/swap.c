@@ -560,6 +560,8 @@ void free_page(unsigned long addr)
 				nr--; \
 last_free_pages[index = (index + 1) & (NR_LAST_FREE_PAGES - 1)] = result; \
 				restore_flags(flag); \
+			printk("got free page %08lx has mem_map = %d\n", \
+				result,mem_map[MAP_NR(result)]); \
 				return result; \
 			} \
 			printk("Free page %08lx has mem_map = %d\n", \
@@ -603,6 +605,7 @@ unsigned long __get_free_page(int priority)
 	}
 	save_flags(flag);
 repeat:
+printk("nr_free_page:%x, list:%x\n",nr_free_pages,free_page_list);
 	REMOVE_FROM_MEM_QUEUE(free_page_list,nr_free_pages);
 	if (priority == GFP_BUFFER)
 		return 0;

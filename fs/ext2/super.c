@@ -365,7 +365,7 @@ struct super_block * ext2_read_super (struct super_block * sb, void * data,
 #ifdef EXT2FS_PRE_02B_COMPAT
 	int fs_converted = 0;
 #endif
-
+printk("ext2_read_super:%d dev:%x\n",__LINE__,dev);
 	set_opt (sb->u.ext2_sb.s_mount_opt, CHECK_NORMAL);
 	if (!parse_options ((char *) data, &sb_block,
 	    &sb->u.ext2_sb.s_mount_opt)) {
@@ -374,8 +374,11 @@ struct super_block * ext2_read_super (struct super_block * sb, void * data,
 	}
 
 	lock_super (sb);
+printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 	set_blocksize (dev, BLOCK_SIZE);
-	if (!(bh = bread (dev, sb_block, BLOCK_SIZE))) {
+	bh=bread(dev,sb_block, BLOCK_SIZE);
+printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
+	if (!bh) {
 		sb->s_dev = 0;
 		unlock_super (sb);
 		printk ("EXT2-fs: unable to read superblock\n");

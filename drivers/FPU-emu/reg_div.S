@@ -75,7 +75,7 @@ xL_arg2_not_denormal:
 	addl	EXP_BIAS,%edx
 	movl	%edx,EXP(%edi)
 
-	jmp	_divide_kernel
+	jmp	divide_kernel
 
 
 /*-----------------------------------------------------------------------*/
@@ -92,14 +92,14 @@ L_arg2_NaN:
 	pushl	%edi			/* Destination */
 	pushl	%esi
 	pushl	%ebx			/* Ordering is important here */
-	call	_real_2op_NaN
+	call	real_2op_NaN
 	jmp	LDiv_exit
 
 /* Invalid operations */
 L_zero_zero:
 L_inf_inf:
 	pushl	%edi			/* Destination */
-	call	_arith_invalid		/* 0/0 or Infinity/Infinity */
+	call	arith_invalid		/* 0/0 or Infinity/Infinity */
 	jmp	LDiv_exit
 
 L_no_NaN_arg:
@@ -151,7 +151,7 @@ L_arg1_not_inf:
 	movb	SIGN(%esi),%al
 	xorb	SIGN(%ebx),%al
 	pushl	%eax			/* lower 8 bits have the sign */
-	call	_divide_by_zero
+	call	divide_by_zero
 	jmp	LDiv_exit
 
 L_arg2_not_zero:
@@ -241,11 +241,11 @@ L_unknown_tags:
 	call	EXCEPTION
 
 	/* Generate a NaN for unknown tags */
-	movl	_CONST_QNaN,%eax
+	movl	CONST_QNaN,%eax
 	movl	%eax,(%edi)
-	movl	_CONST_QNaN+4,%eax
+	movl	CONST_QNaN+4,%eax
 	movl	%eax,SIGL(%edi)
-	movl	_CONST_QNaN+8,%eax
+	movl	CONST_QNaN+8,%eax
 	movl	%eax,SIGH(%edi)
 	jmp	LDiv_exit		/* %eax is nz */
 #endif PARANOID

@@ -133,7 +133,9 @@ static struct super_block * read_super(dev_t dev,char *name,int flags,
 
 	if (!dev)
 		return NULL;
+printk(KERN_NOTICE "read_super:%d dev:%x  s:%x\n",__LINE__,dev,s);
 	check_disk_change(dev);
+printk(KERN_NOTICE "read_super:%d dev:%x  s:%x\n",__LINE__,dev,s);
 	s = get_super(dev);
 	if (s)
 		return s;
@@ -150,10 +152,13 @@ static struct super_block * read_super(dev_t dev,char *name,int flags,
 	}
 	s->s_dev = dev;
 	s->s_flags = flags;
+printk(KERN_NOTICE "read_super:%d dev:%x  s:%x\n",__LINE__,dev,s);
 	if (!type->read_super(s,data, silent)) {
 		s->s_dev = 0;
-		return NULL;
+printk(KERN_NOTICE "read_super:%d s:%x\n",__LINE__,s);
+		return 0;
 	}
+printk(KERN_NOTICE "read_super:%d s:%x\n",__LINE__,s);
 	s->s_dev = dev;
 	s->s_covered = NULL;
 	s->s_rd_only = 0;
@@ -516,10 +521,17 @@ void mount_root(void)
 		printk(KERN_NOTICE "VFS: Insert root floppy and press ENTER\n");
 		wait_for_keypress();
 	}
+printk(KERN_NOTICE "VFS: root:%d  major:%d\n",ROOT_DEV,MAJOR(ROOT_DEV));
 	for (fs_type = file_systems; fs_type->read_super; fs_type++) {
 		if (!fs_type->requires_dev)
 			continue;
+static int firstff=0;
+if(firstff++==0)
+	continue;
+printk(KERN_NOTICE "VFS:%d dev:%x sb:%x\n",__LINE__,ROOT_DEV,sb);
 		sb = read_super(ROOT_DEV,fs_type->name,root_mountflags,NULL,1);
+printk(KERN_NOTICE "VFS:%d sb:%x\n",__LINE__,sb);
+return;
 		if (sb) {
 			inode = sb->s_mounted;
 			inode->i_count += 3 ;	/* NOTE! it is logically used 4 times, not 1 */
@@ -527,11 +539,12 @@ void mount_root(void)
 			sb->s_flags = root_mountflags;
 			current->pwd = inode;
 			current->root = inode;
-			printk ("VFS: Mounted root (%s filesystem)%s.\n",
+			printk ("VFS: Mounted root (%x filesystem)%s.\n",
 				fs_type->name,
 				(sb->s_flags & MS_RDONLY) ? " readonly" : "");
 			return;
 		}
 	}
+printk(KERN_NOTICE "VFS:unable to mount root\n");
 	panic("VFS: Unable to mount root");
 }

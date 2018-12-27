@@ -88,6 +88,7 @@ ENOSYS = 38
 .globl general_protection,reserved
 .globl alignment_check,page_fault
 .globl ret_from_sys_call
+.globl ret_from_sys_call1
 
 #define SAVE_ALL \
 	cld; \
@@ -194,6 +195,11 @@ system_call:
 1:	call syscall_trace
 
 	.align 4,0x90
+ret_from_sys_call1:
+push %ebx
+again:cmpl $88,%ebx
+ jne again
+pop %ebx;
 ret_from_sys_call:
 	cmpl $0,intr_count
 	jne 2f

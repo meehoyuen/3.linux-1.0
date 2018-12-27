@@ -216,7 +216,8 @@ asmlinkage void schedule(void)
 	unsigned long ticks;
 
 /* check alarm, wake up any interruptible tasks that have got a signal */
-
+return;
+//printk("schedule skipped\n");
 	if (intr_count) {
 		printk("Aiee: scheduling in interrupt\n");
 		intr_count = 0;
@@ -287,6 +288,7 @@ confuse_gcc2:
 	if(current != next)
 		kstat.context_swtch++;
 	switch_to(next);
+printk("schedule switch to next pid=%d\n",next->pid);
 	/* Now maybe reload the debug registers */
 	if(current->debugreg[7]){
 		loaddebug(0);
