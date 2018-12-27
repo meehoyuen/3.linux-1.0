@@ -300,6 +300,7 @@ repeat:
 	req->bh = bh;
 	req->bhtail = bh;
 	req->next = NULL;
+printk("add_request\n");
 	add_request(major+blk_dev,req);
 }
 
@@ -355,7 +356,7 @@ void ll_rw_block(int rw, int nr, struct buffer_head * bh[])
 		if (--nr <= 0)
 			return;
 	};
-
+printk("ll_rw_block :%d\n",__LINE__);
 	dev = NULL;
 	if ((major = MAJOR(bh[0]->b_dev)) < MAX_BLKDEV)
 		dev = blk_dev + major;
@@ -406,6 +407,7 @@ void ll_rw_block(int rw, int nr, struct buffer_head * bh[])
 	for (i = 0; i < nr; i++) {
 		if (bh[i]) {
 			bh[i]->b_req = 1;
+printk("ll_rw_block :%d make_request\n",__LINE__);
 			make_request(major, rw, bh[i]);
 			if (rw == READ || rw == READA)
 				kstat.pgpgin++;
@@ -416,9 +418,11 @@ void ll_rw_block(int rw, int nr, struct buffer_head * bh[])
 	if (plugged) {
 		cli();
 		dev->current_request = plug.next;
+printk("ll_rw_block :%d request_fn\n",__LINE__);
 		(dev->request_fn)();
 		sti();
 	}
+printk("ll_rw_block :%d end\n",__LINE__);
 	return;
 
       sorry:

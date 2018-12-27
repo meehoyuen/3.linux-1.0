@@ -263,17 +263,25 @@ return __res;
 
 extern inline size_t strlen(const char * s)
 {
+#if 0
 register int __res __asm__("cx");
 __asm__("cld\n\t"
+	"pushl %%edi\n\t"
         "movl %1,%%edi\n\t"
         "movl $0,%%eax\n\t"
         "movl $0xffffffff,%%ecx\n\t"
 	"repne\n\t"
 	"scasb\n\t"
 	"notl %0\n\t"
-	"decl %0"
+	"decl %0\n\t"
+	"popl %%edi\n\t"
 	:"=c" (__res):"m" (s));
 return __res;
+#else
+const char *sc;
+	for(sc=s;*sc!=0;sc++);	
+return sc-s;
+#endif
 }
 
 extern char * ___strtok;

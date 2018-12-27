@@ -64,7 +64,7 @@ static void extended_partition(struct gendisk *hd, int dev)
 			    !(hd->part[current_minor].nr_sects = p->nr_sects))
 				goto done;  /* shouldn't happen */
 			hd->part[current_minor].start_sect = this_sector + p->start_sect;
-			printk(" %s%c%d", hd->major_name,
+			printk(" %x%c%d", hd->major_name,
 				'a'+(current_minor >> hd->minor_shift),
 				mask & current_minor);
 			current_minor++;
@@ -107,7 +107,7 @@ static void check_partition(struct gendisk *hd, unsigned int dev)
 		printk("  unable to read partition table of device %04x\n",dev);
 		return;
 	}
-	printk("  %s%c:", hd->major_name, 'a'+(minor >> hd->minor_shift));
+	printk("  %x%c:", hd->major_name, 'a'+(minor >> hd->minor_shift));
 	current_minor += 4;  /* first "extra" minor */
 	if (*(unsigned short *) (bh->b_data+510) == 0xAA55) {
 		p = (struct partition *) (0x1BE + bh->b_data);
@@ -115,7 +115,7 @@ static void check_partition(struct gendisk *hd, unsigned int dev)
 			if (!(hd->part[minor].nr_sects = p->nr_sects))
 				continue;
 			hd->part[minor].start_sect = first_sector + p->start_sect;
-			printk(" %s%c%d", hd->major_name,'a'+(minor >> hd->minor_shift), i);
+			printk(" %x%c%d", hd->major_name,'a'+(minor >> hd->minor_shift), i);
 			if ((current_minor & 0x3f) >= 60)
 				continue;
 			if (p->sys_ind == EXTENDED_PARTITION) {
@@ -137,7 +137,7 @@ static void check_partition(struct gendisk *hd, unsigned int dev)
 					continue;
 				hd->part[current_minor].start_sect = p->start_sect;
 				hd->part[current_minor].nr_sects = p->nr_sects;
-				printk(" %s%c%d", hd->major_name,
+				printk(" %x%c%d", hd->major_name,
 					'a'+(current_minor >> hd->minor_shift),
 					current_minor & mask);
 			}
@@ -186,7 +186,9 @@ static void setup_dev(struct gendisk *dev)
 	dev->init();	
 	for (drive=0 ; drive<dev->nr_real ; drive++) {
 		current_minor = 1+(drive<<dev->minor_shift);
+printk("check pt:%d\n",__LINE__);
 		check_partition(dev, major+(drive<<dev->minor_shift));
+printk("check pt:%d\n",__LINE__);
 	}
 	for (i=0 ; i < j ; i++)
 		dev->sizes[i] = dev->part[i].nr_sects >> (BLOCK_SIZE_BITS - 9);
@@ -199,18 +201,20 @@ asmlinkage int sys_setup(void * BIOS)
 	static int callable = 1;
 	struct gendisk *p;
 	int nr=0;
-
 	if (!callable)
 		return -1;
 	callable = 0;
 
 	for (p = gendisk_head ; p ; p=p->next) {
+printk("sys_setup@genhd.c %d\n",__LINE__);
 		setup_dev(p);
+printk("sys_setup@genhd.c %d\n",__LINE__);
 		nr += p->nr_real;
 	}
 		
 	if (ramdisk_size)
 		rd_load();
+printk("sys_setup@genhd.c %d\n",__LINE__);
 	mount_root();
 	return (0);
 }

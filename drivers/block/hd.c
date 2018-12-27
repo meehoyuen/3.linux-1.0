@@ -34,7 +34,7 @@
 
 #define MAJOR_NR HD_MAJOR
 #include "blk.h"
-
+#define DEBUG 1
 #define HD_IRQ 14
 
 static int revalidate_hddisk(int, int);
@@ -183,7 +183,7 @@ static void hd_out(unsigned int drive,unsigned int nsect,unsigned int sect,
 		void (*intr_addr)(void))
 {
 	unsigned short port;
-
+printk("hd_out drive:%x nsec:%d,cmd:%d\n",drive,nsect,cmd);
 	if (drive>1 || head>15)
 		panic("Trying to write bad sector");
 #if (HD_DELAY > 0)
@@ -340,9 +340,9 @@ ok_to_read:
 	i = --CURRENT->nr_sectors;
 	--CURRENT->current_nr_sectors;
 #ifdef DEBUG
-	printk("hd%d : sector = %d, %d remaining to buffer = %08x\n",
+	printk("hd%d : sector = %d, %d remaining to buffer = %08x data:%x\n",
 		MINOR(CURRENT->dev), CURRENT->sector, i, CURRENT-> 
-		buffer);
+		buffer,*((int*)CURRENT->buffer-128));
 #endif
 	if (!i || (CURRENT->bh && !SUBSECTOR(i)))
 		end_request(1);

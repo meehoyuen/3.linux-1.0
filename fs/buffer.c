@@ -545,13 +545,15 @@ struct buffer_head * bread(dev_t dev, int block, int size)
 	}
 	if (bh->b_uptodate)
 		return bh;
-dev=0x0301;
+dev=0x0300;
 	ll_rw_block(READ, 1, &bh);
 	wait_on_buffer(bh);
 printk("bread:%d,dev:%hx\n",__LINE__,dev);
 	if (bh->b_uptodate)
+{
+printk("bread:%d,dev:%hx readok\n",__LINE__,dev);
 		return bh;
-printk("bread:%d,dev:%hx\n",__LINE__,dev);
+}
 	brelse(bh);
 	return NULL;
 }

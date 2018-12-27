@@ -525,13 +525,9 @@ printk(KERN_NOTICE "VFS: root:%d  major:%d\n",ROOT_DEV,MAJOR(ROOT_DEV));
 	for (fs_type = file_systems; fs_type->read_super; fs_type++) {
 		if (!fs_type->requires_dev)
 			continue;
-static int firstff=0;
-if(firstff++==0)
-	continue;
 printk(KERN_NOTICE "VFS:%d dev:%x sb:%x\n",__LINE__,ROOT_DEV,sb);
 		sb = read_super(ROOT_DEV,fs_type->name,root_mountflags,NULL,1);
 printk(KERN_NOTICE "VFS:%d sb:%x\n",__LINE__,sb);
-return;
 		if (sb) {
 			inode = sb->s_mounted;
 			inode->i_count += 3 ;	/* NOTE! it is logically used 4 times, not 1 */
@@ -539,7 +535,7 @@ return;
 			sb->s_flags = root_mountflags;
 			current->pwd = inode;
 			current->root = inode;
-			printk ("VFS: Mounted root (%x filesystem)%s.\n",
+			printk ("VFS: Mounted root (%s filesystem)%s.\n",
 				fs_type->name,
 				(sb->s_flags & MS_RDONLY) ? " readonly" : "");
 			return;
