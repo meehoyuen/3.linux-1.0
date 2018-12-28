@@ -1,0 +1,86 @@
+init/main.o: init/main.c /usr/lib/gcc/x86_64-linux-gnu/4.6/include/stdarg.h \
+ /home/shiyanlou/0.linux-1.0/include/asm/system.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/segment.h \
+ /home/shiyanlou/0.linux-1.0/include/asm/io.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/types.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/fcntl.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/config.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/autoconf.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/sched.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/tasks.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/head.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/fs.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/linkage.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/limits.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/wait.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/dirent.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/vfs.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/net.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/socket.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/sockios.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/pipe_fs_i.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/minix_fs_i.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/ext_fs_i.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/ext2_fs_i.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/hpfs_fs_i.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/msdos_fs_i.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/iso_fs_i.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/nfs_fs_i.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/nfs.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/xia_fs_i.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/sysv_fs_i.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/minix_fs_sb.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/ext_fs_sb.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/ext2_fs_sb.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/hpfs_fs_sb.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/msdos_fs_sb.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/iso_fs_sb.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/nfs_fs_sb.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/xia_fs_sb.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/sysv_fs_sb.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/mm.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/page.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/errno.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/kernel.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/signal.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/time.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/param.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/resource.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/vm86.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/math_emu.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/tty.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/termios.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/unistd.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/string.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/timer.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/ctype.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/delay.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/utsname.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/ioport.h
+tools/build.o: tools/build.c /usr/include/stdio.h /usr/include/features.h \
+ /usr/include/bits/predefs.h /usr/include/sys/cdefs.h \
+ /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
+ /usr/include/gnu/stubs-32.h \
+ /usr/lib/gcc/x86_64-linux-gnu/4.6/include/stddef.h \
+ /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+ /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
+ /usr/lib/gcc/x86_64-linux-gnu/4.6/include/stdarg.h \
+ /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
+ /usr/include/string.h /usr/include/xlocale.h /usr/include/stdlib.h \
+ /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+ /usr/include/endian.h /usr/include/bits/endian.h \
+ /usr/include/bits/byteswap.h /usr/include/sys/types.h \
+ /usr/include/time.h /usr/include/sys/select.h /usr/include/bits/select.h \
+ /usr/include/bits/sigset.h /usr/include/bits/time.h \
+ /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+ /usr/include/alloca.h /usr/include/sys/stat.h /usr/include/bits/stat.h \
+ /usr/include/unistd.h /usr/include/bits/posix_opt.h \
+ /usr/include/bits/environments.h /usr/include/bits/confname.h \
+ /usr/include/getopt.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
+ tools/../include/linux/config.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/autoconf.h \
+ tools/../include/linux/elf.h
+tools/version.o: tools/version.c \
+ /home/shiyanlou/0.linux-1.0/include/linux/config.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/autoconf.h \
+ /home/shiyanlou/0.linux-1.0/include/linux/utsname.h tools/./version.h
