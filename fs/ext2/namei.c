@@ -56,8 +56,14 @@ static int ext2_match (int len, const char * const name,
 	if (len != de->name_len)
 		return 0;
 	__asm__("cld\n\t"
+		"pushw %%cx\n\t"
+		"pushw %%di\n\t"
+		"pushw %%si\n\t"
 		"repe ; cmpsb\n\t"
-		"setz %0"
+		"setz %0\n\t"
+		"popw %%si\n\t"
+		"popw %%di\n\t"
+		"popw %%cx\n\t"
 		:"=q" (same)
 		:"S" ((long) name), "D" ((long) de->name), "c" (len));
 	return (int) same;

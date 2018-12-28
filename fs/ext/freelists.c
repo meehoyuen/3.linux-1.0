@@ -39,8 +39,12 @@
 
 #define clear_block(addr) \
 __asm__("cld\n\t" \
+	"pushw %%cx\n\t"
+	"pushw %%di\n\t"
         "rep\n\t" \
         "stosl" \
+	"popw %%di\n\t"
+	"popw %%cx\n\t"
         : \
         :"a" (0),"c" (BLOCK_SIZE/4),"D" ((long) (addr)))
 

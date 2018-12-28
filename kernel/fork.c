@@ -26,7 +26,6 @@
 #include <asm/system.h>
 
 asmlinkage void ret_from_sys_call(void) __asm__("ret_from_sys_call");
-asmlinkage void ret_from_sys_call1(void) __asm__("ret_from_sys_call1");
 
 /* These should maybe be in <linux/tasks.h> */
 
@@ -175,7 +174,7 @@ asmlinkage int sys_fork(struct pt_regs regs)
 	p->tss.tr = _TSS(nr);
 	childregs = ((struct pt_regs *) (p->kernel_stack_page + PAGE_SIZE)) - 1;
 	p->tss.esp = (unsigned long) childregs;
-	p->tss.eip = (unsigned long) ret_from_sys_call1;
+	p->tss.eip = (unsigned long) ret_from_sys_call;
 	*childregs = regs;
 	childregs->eax = 0;
 	p->tss.back_link = 0;

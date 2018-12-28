@@ -144,8 +144,8 @@ asmlinkage void do_debug(struct pt_regs * regs, long error_code)
 	current->tss.error_code = error_code;
 	if((regs->cs & 3) == 0) {
 	  /* If this is a kernel mode trap, then reset db7 and allow us to continue */
-	  __asm__("movl $0,%%edx\n\t" \
-		  "movl %%edx,%%db7\n\t" \
+	  __asm__("pushl %%edx; movl $0,%%edx\n\t" \
+		  "movl %%edx,%%db7; popl %%edx\n\t" \
 		  : /* no output */);
 
 	  return;

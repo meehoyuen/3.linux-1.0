@@ -32,10 +32,12 @@
 extern inline void memzero (void * s, size_t count)
 {
 __asm__("cld\n\t"
+	"pushw %%cx; pushw %%di\n\t"
 	"rep\n\t"
-	"stosl"
+	"stosl\n\t"
+	"popw %%di; popw %%cx\n\t"
 	:
-	:"a" (0),"D" (s),"c" (count/4));
+	:"a" (0),"D" (s),"c" (count/4): "memory");
 }
 
 void sysv_free_block(struct super_block * sb, unsigned int block)

@@ -46,8 +46,14 @@ static int isofs_match(int len,const char * name, char * compare, int dlen)
 	if (dlen != len)
 		return 0;
 	__asm__("cld\n\t"
+		"pushw %%cx\n\t"
+		"pushw %%di\n\t"
+		"pushw %%si\n\t"
 		"repe ; cmpsb\n\t"
-		"setz %%al"
+		"setz %%al\n\t"
+		"popw %%si\n\t"
+		"popw %%di\n\t"
+		"popw %%cx\n\t"
 		:"=a" (same)
 		:"0" (0),"S" ((long) name),"D" ((long) compare),"c" (len));
 	return same;

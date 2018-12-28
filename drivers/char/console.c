@@ -1362,7 +1362,7 @@ __asm__("cld\n\t"
 	"pushw %%cx\n\t"
 	"pushw %%di\n\t"
 	"rep\n\t"
-	"stosw"
+	"stosw\n\t"
 	"popw %%di\n\t"
 	"popw %%cx\n\t"
 	: /* no output */

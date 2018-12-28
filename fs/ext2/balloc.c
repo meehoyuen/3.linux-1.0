@@ -34,8 +34,12 @@
 
 #define clear_block(addr,size) \
 	__asm__("cld\n\t" \
+		"pushw %%cx\n\t" \
+		"pushw %%di\n\t" \
 		"rep\n\t" \
-		"stosl" \
+		"stosl\n\t" \
+		"popw %%di\n\t" \
+		"popw %%cx\n\t" \
 		: \
 		:"a" (0), "c" (size / 4), "D" ((long) (addr)))
 
@@ -48,6 +52,10 @@ static inline int find_first_zero_bit (unsigned long * addr, unsigned size)
 	if (!size)
 		return 0;
 	__asm__("cld\n\t"
+	       "pushw %%ax\n\t"
+	       "pushw %%bx\n\t"
+	       "pushw %%cx\n\t"
+	       "pushw %%di\n\t"
 	       "movl $-1,%%eax\n\t"
 	       "repe; scasl\n\t"
 	       "je 1f\n\t"
@@ -60,6 +68,10 @@ static inline int find_first_zero_bit (unsigned long * addr, unsigned size)
 "2:		subl %%ebx,%%edi\n\t"
 	       "shll $3,%%edi\n\t"
 	       "addl %%edi,%%edx\n\t"
+		"popw %%di\n\t"
+		"popw %%cx\n\t"
+		"popw %%bx\n\t"
+		"popw %%ax\n\t"
 		:"=d" (res)
 		:"c" ((size + 31) >> 5), "D" (addr), "b" (addr));
 	return res;
@@ -100,11 +112,13 @@ static inline char * find_first_zero_byte (char * addr, int size)
 	if (!size)
 		return 0;
 	__asm__("cld\n\t"
+		"pushw %%ax\n\t"
 		"mov $0,%%eax\n\t"
 		"repnz; scasb\n\t"
 	        "jnz 1f\n\t"
 	        "dec %%edi\n\t"
-"1:		"
+"1:		\n\t"
+		"popw %%ax\n\t"
 		: "=D" (res)
 		: "0" (addr), "c" (size));
 	return res;

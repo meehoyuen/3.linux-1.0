@@ -304,9 +304,9 @@ static void parse_options(char *line)
 			console_loglevel = 10;
 		else if (!strcmp(line,"no387")) {
 			hard_math = 0;
-			__asm__("movl %%cr0,%%eax\n\t"
+			__asm__("pushl %%eax; movl %%cr0,%%eax\n\t"
 				"orl $0xE,%%eax\n\t"
-				"movl %%eax,%%cr0\n\t" :);
+				"movl %%eax,%%cr0; popl %%eax\n\t" :);
 		} else
 			checksetup(line);
 		/*
@@ -493,6 +493,9 @@ void init(void)
 	int pid,i;
 
 	setup((void *) &drive_info);
+asm volatile("push %%ebx;again:cmpl $88,%%ebx; jne again;pop %%ebx":);
+while(1)
+printf("hello\n");
 	sprintf(term, "TERM=con%dx%d", ORIG_VIDEO_COLS, ORIG_VIDEO_LINES);
 	(void) open("/dev/tty1",O_RDWR,0);
 	(void) dup(0);

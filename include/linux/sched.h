@@ -369,7 +369,7 @@ __asm__("cmpl %%ecx,current\n\t" \
 	"1:" \
 	: /* no output */ \
 	:"m" (*(((char *)&tsk->tss.tr)-4)), \
-	 "c" (tsk))
+	 "c" (tsk):"cx")
 
 #define _set_base(addr,base) \
 __asm__("movw %%dx,%0\n\t" \
@@ -380,7 +380,7 @@ __asm__("movw %%dx,%0\n\t" \
 	:"m" (*((addr)+2)), \
 	 "m" (*((addr)+4)), \
 	 "m" (*((addr)+7)), \
-	 "d" (base))
+	 "d" (base):"dx")
 
 #define _set_limit(addr,limit) \
 __asm__("movw %%dx,%0\n\t" \
@@ -392,7 +392,7 @@ __asm__("movw %%dx,%0\n\t" \
 	: /* no output */ \
 	:"m" (*(addr)), \
 	 "m" (*((addr)+6)), \
-	 "d" (limit))
+	 "d" (limit):"dx")
 
 #define set_base(ldt,base) _set_base( ((char *)&(ldt)) , base )
 #define set_limit(ldt,limit) _set_limit( ((char *)&(ldt)) , (limit-1)>>12 )
@@ -561,6 +561,6 @@ extern struct desc_struct default_ldt;
 		__asm__("movl %0,%%edx\n\t" \
 			"movl %%edx,%%db" #register "\n\t" \
 			: /* no output */ \
-			:"m" (current->debugreg[register]))
+			:"m" (current->debugreg[register]):"dx")
 
 #endif

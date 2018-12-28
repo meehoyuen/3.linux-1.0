@@ -206,15 +206,12 @@ asmlinkage int sys_setup(void * BIOS)
 	callable = 0;
 
 	for (p = gendisk_head ; p ; p=p->next) {
-printk("sys_setup@genhd.c %d\n",__LINE__);
 		setup_dev(p);
-printk("sys_setup@genhd.c %d\n",__LINE__);
 		nr += p->nr_real;
 	}
 		
 	if (ramdisk_size)
 		rd_load();
-printk("sys_setup@genhd.c %d\n",__LINE__);
 	mount_root();
 	return (0);
 }
