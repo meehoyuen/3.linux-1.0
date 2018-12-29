@@ -183,7 +183,7 @@ static void hd_out(unsigned int drive,unsigned int nsect,unsigned int sect,
 		void (*intr_addr)(void))
 {
 	unsigned short port;
-printk("hd_out drive:%x nsec:%d,cmd:%d\n",drive,nsect,cmd);
+
 	if (drive>1 || head>15)
 		panic("Trying to write bad sector");
 #if (HD_DELAY > 0)

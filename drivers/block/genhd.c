@@ -186,9 +186,7 @@ static void setup_dev(struct gendisk *dev)
 	dev->init();	
 	for (drive=0 ; drive<dev->nr_real ; drive++) {
 		current_minor = 1+(drive<<dev->minor_shift);
-printk("check pt:%d\n",__LINE__);
 		check_partition(dev, major+(drive<<dev->minor_shift));
-printk("check pt:%d\n",__LINE__);
 	}
 	for (i=0 ; i < j ; i++)
 		dev->sizes[i] = dev->part[i].nr_sects >> (BLOCK_SIZE_BITS - 9);
@@ -201,6 +199,7 @@ asmlinkage int sys_setup(void * BIOS)
 	static int callable = 1;
 	struct gendisk *p;
 	int nr=0;
+
 	if (!callable)
 		return -1;
 	callable = 0;

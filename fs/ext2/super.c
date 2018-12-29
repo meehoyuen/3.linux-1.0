@@ -365,7 +365,7 @@ struct super_block * ext2_read_super (struct super_block * sb, void * data,
 #ifdef EXT2FS_PRE_02B_COMPAT
 	int fs_converted = 0;
 #endif
-printk("ext2_read_super:%d dev:%x\n",__LINE__,dev);
+
 	set_opt (sb->u.ext2_sb.s_mount_opt, CHECK_NORMAL);
 	if (!parse_options ((char *) data, &sb_block,
 	    &sb->u.ext2_sb.s_mount_opt)) {
@@ -374,11 +374,8 @@ printk("ext2_read_super:%d dev:%x\n",__LINE__,dev);
 	}
 
 	lock_super (sb);
-printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 	set_blocksize (dev, BLOCK_SIZE);
-	bh=bread(dev,sb_block, BLOCK_SIZE);
-printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
-	if (!bh) {
+	if (!(bh = bread (dev, sb_block, BLOCK_SIZE))) {
 		sb->s_dev = 0;
 		unlock_super (sb);
 		printk ("EXT2-fs: unable to read superblock\n");
@@ -406,7 +403,6 @@ printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 	}
 	sb->s_blocksize = EXT2_MIN_BLOCK_SIZE << es->s_log_block_size;
 	sb->s_blocksize_bits = EXT2_BLOCK_SIZE_BITS(sb);
-printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 	if (sb->s_blocksize != BLOCK_SIZE && 
 	    (sb->s_blocksize == 1024 || sb->s_blocksize == 2048 ||  
 	     sb->s_blocksize == 4096)) {
@@ -416,7 +412,6 @@ printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 		set_blocksize (dev, sb->s_blocksize);
 		logic_sb_block = sb_block / sb->s_blocksize;
 		offset = sb_block % sb->s_blocksize;
-printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 		bh = bread (dev, logic_sb_block, sb->s_blocksize);
 		if(!bh)
 			return NULL;
@@ -432,7 +427,6 @@ printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 	}
 	sb->u.ext2_sb.s_frag_size = EXT2_MIN_FRAG_SIZE <<
 				   es->s_log_frag_size;
-printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 	if (sb->u.ext2_sb.s_frag_size)
 		sb->u.ext2_sb.s_frags_per_block = sb->s_blocksize /
 						  sb->u.ext2_sb.s_frag_size;
@@ -485,7 +479,6 @@ printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 		fs_converted = 1;
 	}
 #endif
-printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 	if (sb->s_magic != EXT2_SUPER_MAGIC) {
 		sb->s_dev = 0;
 		unlock_super (sb);
@@ -495,7 +488,6 @@ printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 				MAJOR(dev), MINOR(dev));
 		return NULL;
 	}
-printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 	if (sb->s_blocksize != bh->b_size) {
 		sb->s_dev = 0;
 		unlock_super (sb);
@@ -514,7 +506,6 @@ printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 			sb->u.ext2_sb.s_frag_size, sb->s_blocksize);
 		return NULL;
 	}
-printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 
 	sb->u.ext2_sb.s_groups_count = (es->s_blocks_count -
 				        es->s_first_data_block +
@@ -544,7 +535,6 @@ printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 			return NULL;
 		}
 	}
-printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 	if (!ext2_check_descriptors (sb)) {
 		sb->s_dev = 0;
 		unlock_super (sb);
@@ -554,7 +544,6 @@ printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 		printk ("EXT2-fs: group descriptors corrupted !\n");
 		return NULL;
 	}
-printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 	for (i = 0; i < EXT2_MAX_GROUP_LOADED; i++) {
 		sb->u.ext2_sb.s_inode_bitmap_number[i] = 0;
 		sb->u.ext2_sb.s_inode_bitmap[i] = NULL;
@@ -585,7 +574,6 @@ printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 		sb->s_dirt = 1;
 	}
 #endif
-printk("ext2_read_super:%d dev:%x bh:%x\n",__LINE__,dev,bh);
 	ext2_setup_super (sb, es);
 	return sb;
 }

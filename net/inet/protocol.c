@@ -64,8 +64,7 @@ static struct inet_protocol udp_protocol = {
 };
 
 
-char *p000="######";
-/*static*/ struct inet_protocol icmp_protocol = {
+static struct inet_protocol icmp_protocol = {
   icmp_rcv,		/* ICMP handler		*/
   NULL,			/* ICMP never fragments anyway */
   NULL,			/* ICMP error control	*/
@@ -76,9 +75,8 @@ char *p000="######";
   "ICMP"		/* name			*/
 };
 
-char p111[]="helloworld#";
+
 struct inet_protocol *inet_protocol_base = &icmp_protocol;
-char *p222="#helloworld";
 struct inet_protocol *inet_protos[MAX_INET_PROTOS] = {
   NULL
 };

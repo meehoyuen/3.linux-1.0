@@ -605,7 +605,6 @@ unsigned long __get_free_page(int priority)
 	}
 	save_flags(flag);
 repeat:
-printk("nr_free_page:%x, list:%x\n",nr_free_pages,free_page_list);
 	REMOVE_FROM_MEM_QUEUE(free_page_list,nr_free_pages);
 	if (priority == GFP_BUFFER)
 		return 0;

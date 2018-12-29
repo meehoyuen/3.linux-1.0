@@ -903,19 +903,15 @@ printk("page fault addr:%x user mode\n",address);
 				user_esp = regs->esp;
 		}
 		if (error_code & 1)
-{
-printk("page fault addr:%x write protected\n",address);
+		{
+			printk("page fault addr:%x write protected\n",address);
 			do_wp_page(error_code, address, current, user_esp);
-}
+		}
 		else
-{
-printk("page fault addr:%x no page\n",address);
 			do_no_page(error_code, address, current, user_esp);
-}
 		return;
 	}
 	address -= TASK_SIZE;
-printk("wp_works_ok:%x,present:%x\n",wp_works_ok,error_code & PAGE_PRESENT);
 	if (wp_works_ok < 0 && address == 0 && (error_code & PAGE_PRESENT)) {
 		wp_works_ok = 1;
 		pg0[0] = PAGE_SHARED;

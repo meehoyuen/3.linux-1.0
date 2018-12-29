@@ -236,7 +236,7 @@ static void calibrate_delay(void)
 		__delay(loops_per_sec);
 		ticks = jiffies - ticks;
 		if (ticks >= HZ) {
-			__asm__("mull %1 ; divl %2"
+			__asm__("pushl %%edx; mull %1 ; divl %2; popl %%edx;"
 				:"=a" (loops_per_sec)
 				:"d" (HZ),
 				 "r" (ticks),
@@ -246,7 +246,6 @@ static void calibrate_delay(void)
 				(loops_per_sec/5000) % 100);
 			return;
 		}
-		__delay(1); //code optimize bug??!!
 	}
 	printk("failed\n");
 }
@@ -304,8 +303,8 @@ static void parse_options(char *line)
 			console_loglevel = 10;
 		else if (!strcmp(line,"no387")) {
 			hard_math = 0;
-			__asm__("movl %%cr0,%%eax\n\t"
-				"orl $0xE,%%eax\n\t"
+			__asm__("pushl %%eax; movl %%cr0,%%eax\n\t"
+				"orl $0xE,%%eax; popl %%eax\n\t"
 				"movl %%eax,%%cr0\n\t" :);
 		} else
 			checksetup(line);
@@ -355,16 +354,7 @@ static void copro_timeout(void)
 	outb_p(0,0xf1);
 	outb_p(0,0xf0);
 }
-static int printf(const char *fmt, ...)
-{
-	va_list args;
-	int i;
 
-	va_start(args, fmt);
-	write(1,printbuf,i=vsprintf(printbuf, fmt, args));
-	va_end(args);
-	return i;
-}
 asmlinkage void start_kernel(void)
 {
 /*
@@ -411,7 +401,7 @@ asmlinkage void start_kernel(void)
 	memory_start = chr_dev_init(memory_start,memory_end);
 	memory_start = blk_dev_init(memory_start,memory_end);
 	sti();
-	//calibrate_delay();
+	calibrate_delay();
 #ifdef CONFIG_INET
 	memory_start = net_dev_init(memory_start,memory_end);
 #endif
@@ -420,7 +410,6 @@ asmlinkage void start_kernel(void)
 #endif
 	memory_start = inode_init(memory_start,memory_end);
 	memory_start = file_table_init(memory_start,memory_end);
-	printk("low:%x, start:%x, end:%x\n",low_memory_start,memory_start,memory_end);
 	mem_init(low_memory_start,memory_start,memory_end);
 	buffer_init();
 	time_init();
@@ -495,6 +484,16 @@ while(1);
 		idle();
 }
 
+static int printf(const char *fmt, ...)
+{
+	va_list args;
+	int i;
+
+	va_start(args, fmt);
+	write(1,printbuf,i=vsprintf(printbuf, fmt, args));
+	va_end(args);
+	return i;
+}
 
 void init(void)
 {
