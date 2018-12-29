@@ -106,15 +106,15 @@ bool 'System V and Coherent filesystem support' CONFIG_SYSV_FS y
 *
 bool 'Parallel printer support' CONFIG_PRINTER n
 bool 'Logitech busmouse support' CONFIG_BUSMOUSE n
-bool 'PS/2 mouse (aka "auxiliary device") support' CONFIG_PSMOUSE n
+bool 'PS/2 mouse (aka "auxiliary device") support' CONFIG_PSMOUSE y
 if [ "$CONFIG_PSMOUSE" = "y" ]
-bool 'C&T 82C710 mouse port support (as on TI Travelmate)' CONFIG_82C710_MOUSE n
+bool 'C&T 82C710 mouse port support (as on TI Travelmate)' CONFIG_82C710_MOUSE y
 fi
-bool 'Microsoft busmouse support' CONFIG_MS_BUSMOUSE n
-bool 'ATIXL busmouse support' CONFIG_ATIXL_BUSMOUSE n
-bool 'Selection (cut and paste for virtual consoles)' CONFIG_SELECTION n
-bool 'QIC-02 tape support' CONFIG_TAPE_QIC02 n
-bool 'QIC-117 tape support' CONFIG_FTAPE n
+bool 'Microsoft busmouse support' CONFIG_MS_BUSMOUSE y
+bool 'ATIXL busmouse support' CONFIG_ATIXL_BUSMOUSE y
+bool 'Selection (cut and paste for virtual consoles)' CONFIG_SELECTION y
+bool 'QIC-02 tape support' CONFIG_TAPE_QIC02 y
+bool 'QIC-117 tape support' CONFIG_FTAPE y
 if [ "$CONFIG_FTAPE" = "y" ]
 int ' number of ftape buffers' NR_FTAPE_BUFFERS 3
 fi

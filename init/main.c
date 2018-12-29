@@ -468,9 +468,9 @@ asmlinkage void start_kernel(void)
 	system_utsname.machine[1] = '0' + x86;
 	printk(linux_banner);
 
-	//move_to_user_mode();
+	move_to_user_mode();
 //asm volatile("push %%ebx;again:cmpl $88,%%ebx; jne again;pop %%ebx":);
-	if (1/*!sys_fork()*/)		/* we count on this going ok */
+	if (1/*!fork()*/)		/* we count on this going ok */
 	{
 		init();
 	}
@@ -492,17 +492,19 @@ void init(void)
 {
 	int pid,i;
 
-	sys_setup((void *) &drive_info);
+	setup((void *) &drive_info);
 	sprintf(term, "TERM=con%dx%d", ORIG_VIDEO_COLS, ORIG_VIDEO_LINES);
-	int tfd = sys_open("/dev/tty1",O_RDWR,0);
-printk("tfd:|%d|\n",tfd);
-while(1);
-printf("hello\n");
-	(void) open("/dev/tty1",O_RDWR,0);
-asm volatile("push %%ebx;again:cmpl $88,%%ebx; jne again;pop %%ebx":);
+	int fd = open("/dev/test",O_RDWR,0);
+	int tfd = open("/dev/tty1",O_RDWR,0);
+printf("tfd:|%d|\n",tfd);
+//write(tfd,"helloworld\n",11);
+	//(void) open("/dev/tty1",O_RDWR,0);
+//asm volatile("push %%ebx;again:cmpl $88,%%ebx; jne again;pop %%ebx":);
 	(void) dup(0);
 	(void) dup(0);
 
+while(1)
+printf("hello\n");
 	execve("/etc/init",argv_init,envp_init);
 	execve("/bin/init",argv_init,envp_init);
 	execve("/sbin/init",argv_init,envp_init);
