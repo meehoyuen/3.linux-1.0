@@ -37,7 +37,7 @@
 #define SYS_SIZE DEF_SYSSIZE
 
 #define DEFAULT_MAJOR_ROOT 3
-#define DEFAULT_MINOR_ROOT 0
+#define DEFAULT_MINOR_ROOT 1
 
 /* max nr of sectors of setup: don't change unless you also change
  * bootsect etc */

@@ -524,7 +524,7 @@ printk(KERN_NOTICE "VFS: root:%d  major:%d\n",ROOT_DEV,MAJOR(ROOT_DEV));
 		if (!fs_type->requires_dev)
 			continue;
 printk(KERN_NOTICE "VFS:%d dev:%x sb:%x\n",__LINE__,ROOT_DEV,sb);
-		sb = read_super(ROOT_DEV,fs_type->name,root_mountflags,NULL,1);
+		sb = read_super(ROOT_DEV,fs_type->name,root_mountflags,NULL,0);
 printk(KERN_NOTICE "VFS:%d sb:%x\n",__LINE__,sb);
 		if (sb) {
 			inode = sb->s_mounted;
