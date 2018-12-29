@@ -887,10 +887,10 @@ static int get_ext_status3(void)
 /* Read drive status and set generic status too.
  * NOTE: Once we do a tp_sense(), read/write transfers are killed.
  */
+static void finish_rw(int cmd);
 static int tp_sense(int ignore)
 {
 	unsigned err = 0, exnr = 0, gs = 0;
-	static void finish_rw(int cmd);
 
 	printk(TPQIC_NAME ": tp_sense(ignore=0x%x) enter\n", ignore);
 

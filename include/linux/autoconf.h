@@ -9,8 +9,8 @@
 #define CONFIG_MATH_EMULATION 1
 #define CONFIG_BLK_DEV_HD 1
 #undef CONFIG_BLK_DEV_XD
-#undef CONFIG_INET
-#define CONFIG_MAX_16M 1
+#define CONFIG_INET 1
+#undef CONFIG_MAX_16M
 #define CONFIG_SYSVIPC 1
 #undef CONFIG_M486
 
@@ -18,8 +18,8 @@
  * Program binary formats
  * 
  */
-#undef CONFIG_BINFMT_ELF
-#undef CONFIG_BINFMT_COFF
+#define CONFIG_BINFMT_ELF 1
+#define CONFIG_BINFMT_COFF 1
 
 /* 
  * SCSI support
@@ -31,7 +31,21 @@
  * Network device support
  * 
  */
-#undef CONFIG_ETHERCARDS
+#define CONFIG_ETHERCARDS 1
+#undef CONFIG_SLIP
+#undef CONFIG_PLIP
+#define CONFIG_NE2000 1
+#undef CONFIG_WD80x3
+#undef CONFIG_ULTRA
+#undef CONFIG_EL1
+#undef CONFIG_EL2
+#undef CONFIG_EL3
+#undef CONFIG_HPLAN
+#undef CONFIG_LANCE
+#undef CONFIG_AT1700
+#undef CONFIG_DEPCA
+#undef CONFIG_DE600
+#undef CONFIG_ATP
 
 /* 
  */
@@ -48,11 +62,11 @@
 #define CONFIG_EXT2_FS 1
 #undef CONFIG_XIA_FS
 #undef CONFIG_MSDOS_FS
-#undef CONFIG_PROC_FS
-#undef CONFIG_NFS_FS
+#define CONFIG_PROC_FS 1
+#define CONFIG_NFS_FS 1
 #undef CONFIG_ISO9660_FS
 #undef CONFIG_HPFS_FS
-#undef CONFIG_SYSV_FS
+#define CONFIG_SYSV_FS 1
 
 /* 
  * character devices

@@ -40,6 +40,36 @@
 /*
  * NOTE! unlike strncmp, ext2_match returns 1 for success, 0 for failure.
  */
+static int ext2_match1 (int len, const char * const name,
+		       struct ext2_dir_entry * de)
+{
+	unsigned char same;
+
+printk("name:%s\n",de->name);
+	if (!de || !de->inode || len > EXT2_NAME_LEN)
+		return 0;
+	/*
+	 * "" means "." ---> so paths like "/usr/lib//libc.a" work
+	 */
+	if (!len && de->name_len == 1 && (de->name[0] == '.') &&
+	   (de->name[1] == '\0'))
+		return 1;
+	if (len != de->name_len)
+		return 0;
+	__asm__("cld\n\t"
+		"pushl %%ecx\n\t"
+		"pushl %%edi\n\t"
+		"pushl %%esi\n\t"
+		"repe ; cmpsb\n\t"
+		"setz %0\n\t"
+		"popl %%esi\n\t"
+		"popl %%edi\n\t"
+		"popl %%ecx\n\t"
+		:"=q" (same)
+		:"S" ((long) name), "D" ((long) de->name), "c" (len));
+	return (int) same;
+}
+
 static int ext2_match (int len, const char * const name,
 		       struct ext2_dir_entry * de)
 {
@@ -142,7 +172,7 @@ static struct buffer_head * ext2_find_entry (struct inode * dir,
 			if (!ext2_check_dir_entry ("ext2_find_entry", dir,
 						   de, bh, offset))
 				goto failure;
-			if (de->inode != 0 && ext2_match (namelen, name, de)) {
+			if (de->inode != 0 && ext2_match1 (namelen, name, de)) {
 				for (i = 0; i < NAMEI_RA_SIZE; ++i) {
 					if (bh_use[i] != bh)
 						brelse (bh_use[i]);
