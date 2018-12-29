@@ -72,15 +72,16 @@ loopback_xmit(struct sk_buff *skb, struct device *dev)
   dev->tbusy = 0;
 
 #if 1
-	__asm__("cmpl $0,intr_count\n\t"
+	__asm__("pushl %%eax; pushl %%ecx; pushl %%edx; cmpl $0,intr_count\n\t"
 		"jne 1f\n\t"
 		"movl bh_active,%%eax\n\t"
 		"testl bh_mask,%%eax\n\t"
 		"je 1f\n\t"
 		"incl intr_count\n\t"
 		"call do_bottom_half\n\t"
-		"decl intr_count\n"
-		"1:"
+		"decl intr_count\n\t"
+		"1:\n\t"
+		"popl %%edx;popl %%ecx;popl %%eax\n\t"
 		:);
 #endif
 

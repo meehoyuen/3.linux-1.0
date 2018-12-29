@@ -4,7 +4,7 @@
 #include <linux/segment.h>
 
 #define move_to_user_mode() \
-__asm__ __volatile__ ("movl %%esp,%%eax\n\t" \
+__asm__ __volatile__ ("pushl %%eax; movl %%esp,%%eax\n\t" \
 	"pushl %0\n\t" \
 	"pushl %%eax\n\t" \
 	"pushfl\n\t" \
@@ -15,7 +15,7 @@ __asm__ __volatile__ ("movl %%esp,%%eax\n\t" \
 	"mov %%ax,%%ds\n\t" \
 	"mov %%ax,%%es\n\t" \
 	"mov %%ax,%%fs\n\t" \
-	"mov %%ax,%%gs" \
+	"mov %%ax,%%gs; popl %%eax" \
 	: /* no outputs */ :"i" (USER_DS), "i" (USER_CS))
 
 #define sti() __asm__ __volatile__ ("sti": :)
@@ -52,10 +52,12 @@ __asm__ __volatile__("pushl %0 ; popfl": /* no output */ :"r" (x))
 #define iret() __asm__ __volatile__ ("iret": :)
 
 #define _set_gate(gate_addr,type,dpl,addr) \
-__asm__ __volatile__ ("movw %%dx,%%ax\n\t" \
+__asm__ __volatile__ ("pushl %%eax; pushl %%edx; movw %%dx,%%ax\n\t" \
 	"movw %2,%%dx\n\t" \
 	"movl %%eax,%0\n\t" \
-	"movl %%edx,%1" \
+	"movl %%edx,%1\n\t" \
+	"popl %%edx\n\t"
+	"popl %%eax\n\t"
 	:"=m" (*((long *) (gate_addr))), \
 	 "=m" (*(1+(long *) (gate_addr))) \
 	:"i" ((short) (0x8000+(dpl<<13)+(type<<8))), \

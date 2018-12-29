@@ -473,7 +473,7 @@ ip_compute_csum(unsigned char * buff, int len)
 
   /* Do the first multiple of 4 bytes and convert to 16 bits. */
   if (len > 3) {
-	__asm__("clc\n"
+	__asm__("pushl %%eax; pushl %%ebx; pushl %%ecx; pushl %%esi; clc\n"
 	        "1:\t"
 	    	"lodsl\n\t"
 	    	"adcl %%eax, %%ebx\n\t"
@@ -482,22 +482,25 @@ ip_compute_csum(unsigned char * buff, int len)
 	    	"movl %%ebx, %%eax\n\t"
 	    	"shrl $16, %%eax\n\t"
 	    	"addw %%ax, %%bx\n\t"
-	    	"adcw $0, %%bx"
+	    	"adcw $0, %%bx\n\t"
+		"popl %%esi; popl %%ecx; popl %%ebx; popl %%eax\n\t"
 	        : "=b" (sum) , "=S" (buff)
 	        : "0" (sum), "c" (len >> 2) ,"1" (buff));
   }
   if (len & 2) {
-	__asm__("lodsw\n\t"
+	__asm__("pushl %%eax; pushl %%ebx; pushl %%esi; lodsw\n\t"
 	    	"addw %%ax, %%bx\n\t"
-	    	"adcw $0, %%bx"
+	    	"adcw $0, %%bx\n\t"
+		"popl %%esi; popl %%ebx; popl %%eax\n\t"
 	        : "=b" (sum), "=S" (buff)
 	        : "0" (sum), "1" (buff));
   }
   if (len & 1) {
-	__asm__("lodsb\n\t"
+	__asm__("pushl %%eax; pushl %%ebx; pushl %%esi; lodsb\n\t"
 	    	"movb $0, %%ah\n\t"
 	    	"addw %%ax, %%bx\n\t"
-	    	"adcw $0, %%bx"
+	    	"adcw $0, %%bx\n\t"
+		"popl %%esi; popl %%ebx; popl %%eax\n\t"
 	        : "=b" (sum), "=S" (buff)
 	        : "0" (sum), "1" (buff));
   }

@@ -55,6 +55,9 @@ __asm__ ("movl %0,%%fs:%1": /* no outputs */ :"ir" (val),"m" (*addr));
 static inline void __generic_memcpy_tofs(void * to, const void * from, unsigned long n)
 {
 __asm__("cld\n\t"
+	"pushl %%ecx\n\t"
+	"pushl %%edi\n\t"
+	"pushl %%esi\n\t"
 	"push %%es\n\t"
 	"push %%fs\n\t"
 	"pop %%es\n\t"
@@ -66,7 +69,10 @@ __asm__("cld\n\t"
 	"movsw\n"
 	"2:\tshrl $2,%%ecx\n\t"
 	"rep ; movsl\n\t"
-	"pop %%es"
+	"pop %%es\n\t"
+	"popl %%esi\n\t"
+	"popl %%edi\n\t"
+	"popl %%ecx\n\t"
 	: /* no outputs */
 	:"c" (n),"D" ((long) to),"S" ((long) from));
 }
@@ -92,12 +98,18 @@ static inline void __constant_memcpy_tofs(void * to, const void * from, unsigned
 	}
 #define COMMON(x) \
 __asm__("cld\n\t" \
+	"pushl %%ecx\n\t" \
+	"pushl %%edi\n\t" \
+	"pushl %%esi\n\t" \
 	"push %%es\n\t" \
 	"push %%fs\n\t" \
 	"pop %%es\n\t" \
 	"rep ; movsl\n\t" \
 	x \
-	"pop %%es" \
+	"pop %%es\n\t" \
+	"popl %%esi\n\t" \
+	"popl %%edi\n\t" \
+	"popl %%ecx\n\t" \
 	: /* no outputs */ \
 	:"c" (n/4),"D" ((long) to),"S" ((long) from))
 
@@ -121,6 +133,9 @@ __asm__("cld\n\t" \
 static inline void __generic_memcpy_fromfs(void * to, const void * from, unsigned long n)
 {
 __asm__("cld\n\t"
+	"pushl %%ecx\n\t"
+	"pushl %%edi\n\t"
+	"pushl %%esi\n\t"
 	"testb $1,%%cl\n\t"
 	"je 1f\n\t"
 	"fs ; movsb\n"
@@ -128,7 +143,10 @@ __asm__("cld\n\t"
 	"je 2f\n\t"
 	"fs ; movsw\n"
 	"2:\tshrl $2,%%ecx\n\t"
-	"rep ; fs ; movsl"
+	"rep ; fs ; movsl\n\t"
+	"popl %%esi\n\t"
+	"popl %%edi\n\t"
+	"popl %%ecx\n\t"
 	: /* no outputs */
 	:"c" (n),"D" ((long) to),"S" ((long) from));
 }
@@ -154,8 +172,14 @@ static inline void __constant_memcpy_fromfs(void * to, const void * from, unsign
 	}
 #define COMMON(x) \
 __asm__("cld\n\t" \
+	"pushl %%ecx\n\t" \
+	"pushl %%edi\n\t" \
+	"pushl %%esi\n\t" \
 	"rep ; fs ; movsl\n\t" \
-	x \
+	x "\n\t" \
+	"popl %%esi\n\t" \
+	"popl %%edi\n\t" \
+	"popl %%ecx\n\t" \
 	: /* no outputs */ \
 	:"c" (n/4),"D" ((long) to),"S" ((long) from))
 

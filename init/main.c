@@ -468,10 +468,17 @@ asmlinkage void start_kernel(void)
 	system_utsname.machine[1] = '0' + x86;
 	printk(linux_banner);
 
-	move_to_user_mode();
+	//move_to_user_mode();
 //asm volatile("push %%ebx;again:cmpl $88,%%ebx; jne again;pop %%ebx":);
-	if (1/*!fork()*/)		/* we count on this going ok */
+	if (!sys_fork())		/* we count on this going ok */
 	{
+		printk("after fork child\n");
+		printk("after fork child\n");
+		printk("after fork child\n");
+		printk("after fork child\n");
+		printk("after fork child\n");
+		printk("after fork child\n");
+		printk("after fork child\n");
 		init();
 	}
 /*

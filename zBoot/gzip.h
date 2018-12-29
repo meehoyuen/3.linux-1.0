@@ -22,17 +22,13 @@
 #  define memzero(s, n)     memset ((s), 0, (n))
 extern inline int memcmp(const void * cs,const void * ct,size_t count)
 {
-register int __res __asm__("ax");
-__asm__("cld\n\t"
-        "repe\n\t"
-        "cmpsb\n\t"
-        "je 1f\n\t"
-        "movl $1,%%eax\n\t"
-        "jb 1f\n\t"
-        "negl %%eax\n"
-        "1:"
-        :"=a" (__res):"0" (0),"D" (cs),"S" (ct),"c" (count));
-return __res;
+    const unsigned char *su1, *su2;
+    signed char res = 0;
+
+    for( su1 = cs, su2 = ct; 0 < count; ++su1, ++su2, count--)
+        if ((res = *su1 - *su2) != 0)
+            break;
+    return res;
 }
 #else
 #  include <strings.h>

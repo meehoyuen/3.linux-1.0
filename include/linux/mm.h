@@ -178,7 +178,7 @@ extern int do_munmap(unsigned long, size_t);
 	rw_swap_page(WRITE,(nr),(buf))
 
 #define invalidate() \
-__asm__ __volatile__("movl %%cr3,%%eax\n\tmovl %%eax,%%cr3":)
+__asm__ __volatile__("movl %%cr3,%%eax\n\tmovl %%eax,%%cr3"::"a"(0))
 
 extern unsigned long high_memory;
 

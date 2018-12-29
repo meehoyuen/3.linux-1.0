@@ -146,46 +146,59 @@ udp_check(struct udphdr *uh, int len,
 
   print_udp(uh);
 
-  __asm__("\t addl %%ecx,%%ebx\n"
+  __asm__("\t pushl %%ecx; pushl %%ebx; pushl %%edx; addl %%ecx,%%ebx\n"
 	  "\t adcl %%edx,%%ebx\n"
 	  "\t adcl $0, %%ebx\n"
+	  "\t popl %%edx; popl %%ebx; popl %%ecx\n"
 	  : "=b"(sum)
 	  : "0"(daddr), "c"(saddr), "d"((ntohs(len) << 16) + IPPROTO_UDP*256));
 
   if (len > 3) {
-	__asm__("\tclc\n"
+	__asm__("\t pushl %%eax; pushl %%ecx; pushl %%ebx; pushl %%esi; clc\n"
 		"1:\n"
 		"\t lodsl\n"
 		"\t adcl %%eax, %%ebx\n"
 		"\t loop 1b\n"
 		"\t adcl $0, %%ebx\n"
+		"\t popl %%esi\n"
+		"\t popl %%ebx\n"
+		"\t popl %%ecx\n"
+		"\t popl %%eax\n"
 		: "=b"(sum) , "=S"(uh)
 		: "0"(sum), "c"(len/4) ,"1"(uh));
   }
 
   /* Convert from 32 bits to 16 bits. */
-  __asm__("\t movl %%ebx, %%ecx\n"
+  __asm__("\t pushl %%ecx; pushl %%ebx; movl %%ebx, %%ecx\n"
 	  "\t shrl $16,%%ecx\n"
 	  "\t addw %%cx, %%bx\n"
 	  "\t adcw $0, %%bx\n"
+	  "\t popl %%ebx\n"
+	  "\t popl %%ecx\n"
 	  : "=b"(sum)
 	  : "0"(sum));
 
   /* Check for an extra word. */
   if ((len & 2) != 0) {
-	__asm__("\t lodsw\n"
+	__asm__("\t pushl %%eax; pushl %%ebx; pushl %%esi; lodsw\n"
 		"\t addw %%ax,%%bx\n"
 		"\t adcw $0, %%bx\n"
+	  	"\t popl %%esi\n"
+	  	"\t popl %%ebx\n"
+	  	"\t popl %%eax\n"
 		: "=b"(sum), "=S"(uh)
 		: "0"(sum) ,"1"(uh));
   }
 
   /* Now check for the extra byte. */
   if ((len & 1) != 0) {
-	__asm__("\t lodsb\n"
+	__asm__("\t pushl %%eax; pushl %%ebx; pushl %%esi; lodsb\n"
 		"\t movb $0,%%ah\n"
 		"\t addw %%ax,%%bx\n"
 		"\t adcw $0, %%bx\n"
+	  	"\t popl %%esi\n"
+	  	"\t popl %%ebx\n"
+	  	"\t popl %%eax\n"
 		: "=b"(sum)
 		: "0"(sum) ,"S"(uh));
   }
