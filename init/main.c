@@ -479,6 +479,7 @@ asmlinkage void start_kernel(void)
 		printk("after fork child\n");
 		printk("after fork child\n");
 		printk("after fork child\n");
+while(1);
 		init();
 	}
 /*

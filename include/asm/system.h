@@ -56,8 +56,8 @@ __asm__ __volatile__ ("pushl %%eax; pushl %%edx; movw %%dx,%%ax\n\t" \
 	"movw %2,%%dx\n\t" \
 	"movl %%eax,%0\n\t" \
 	"movl %%edx,%1\n\t" \
-	"popl %%edx\n\t"
-	"popl %%eax\n\t"
+	"popl %%edx\n\t" \
+	"popl %%eax\n\t" \
 	:"=m" (*((long *) (gate_addr))), \
 	 "=m" (*(1+(long *) (gate_addr))) \
 	:"i" ((short) (0x8000+(dpl<<13)+(type<<8))), \
