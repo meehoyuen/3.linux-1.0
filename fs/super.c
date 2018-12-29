@@ -539,6 +539,5 @@ printk(KERN_NOTICE "VFS:%d sb:%x\n",__LINE__,sb);
 			return;
 		}
 	}
-printk(KERN_NOTICE "VFS:unable to mount root\n");
 	panic("VFS: Unable to mount root");
 }
