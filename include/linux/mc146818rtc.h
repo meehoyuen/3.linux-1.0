@@ -101,4 +101,4 @@ outb_p(val,0x71); \
 #define BIN_TO_BCD(val) ((val)=(((val)/10)<<4) + (val)%10)
 #endif
 
-#endif /* _MC146818RTC_H */
+#endif

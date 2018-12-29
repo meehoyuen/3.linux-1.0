@@ -133,7 +133,7 @@ static char *sg_malloc(int size)
     big_inuse=1;
     return big_buff;
    }
-#endif   
+#endif
   return NULL;
  }
 
@@ -222,7 +222,7 @@ static int sg_write(struct inode *inode,struct file *filp,char *buf,int count)
      return -EWOULDBLOCK;
 #ifdef DEBUG
     printk("sg_write: sleeping on pending request\n");
-#endif     
+#endif
     interruptible_sleep_on(&device->write_wait);
     if (current->signal & ~current->blocked)
      return -ERESTARTSYS;
@@ -257,7 +257,7 @@ static int sg_write(struct inode *inode,struct file *filp,char *buf,int count)
    } 
 #ifdef DEBUG
   printk("device allocated\n");
-#endif    
+#endif
   /* now issue command */
   SCpnt->request.dev=dev;
   SCpnt->sense_buffer[0]=0;
@@ -273,7 +273,7 @@ static int sg_write(struct inode *inode,struct file *filp,char *buf,int count)
                (void *) device->buff,amt,sg_command_done,device->timeout,SG_DEFAULT_RETRIES);
 #ifdef DEBUG
   printk("done cmd\n");
-#endif               
+#endif
   return count;
  }
 

@@ -111,7 +111,7 @@ L_accum_loop:
 	addl	$1,SUM_MIDDLE
 	adcl	$0,SUM_MS
 L_no_poly_round:
-#endif EXTRA_PRECISE
+#endif
 
 	subl	TERM_SIZE,%edi
 	decl	PARAM4
@@ -125,7 +125,7 @@ L_accum_done:
 
 	addl	$1,SUM_MIDDLE
 	adcl	$0,SUM_MS
-#endif EXTRA_PRECISE
+#endif
 
 L_poly_done:
 	movl	PARAM1,%edi		/* accum */

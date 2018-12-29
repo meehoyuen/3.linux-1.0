@@ -189,7 +189,7 @@ void audit_ptree(void)
 		}
 	}
 }
-#endif /* DEBUG_PROC_TREE */
+#endif
 
 /*
  * This checks not only the pgrp, but falls back on the pid if no

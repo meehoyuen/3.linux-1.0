@@ -65,7 +65,7 @@ FPU_result_2:
 	.long	0
 FPU_ovfl_flag:
 	.byte	0
-#endif REENTRANT_FPU
+#endif
 
 
 .text
@@ -80,7 +80,7 @@ reg_u_div:
 	movl	%esp,%ebp
 #ifdef REENTRANT_FPU
 	subl	$28,%esp
-#endif REENTRANT_FPU
+#endif
 
 	pushl	%esi
 	pushl	%edi
@@ -109,7 +109,7 @@ xOp1_not_denorm:
 	jnz	fpu_Arith_exit
 
 xOp2_not_denorm:
-#endif DENORM_OPERAND
+#endif
 
 divide_kernel:
 #ifdef PARANOID
@@ -117,7 +117,7 @@ divide_kernel:
 /*	je	L_bugged */
 	testl	$0x80000000, SIGH(%ebx)	/* Divisor */
 	je	L_bugged
-#endif PARANOID
+#endif
 
 /* Check if the divisor can be treated as having just 32 bits */
 	cmpl	$0,SIGL(%ebx)
@@ -253,7 +253,7 @@ LFirst_div_done:
 
 #ifdef PARANOID
 	jb	L_bugged_1
-#endif PARANOID
+#endif
 
 	/* need to subtract another once of the denom */
 	incl	FPU_result_2	/* Correct the answer */
@@ -266,7 +266,7 @@ LFirst_div_done:
 #ifdef PARANOID
 	sbbl	$0,FPU_accum_3
 	jne	L_bugged_1	/* Must check for non-zero result here */
-#endif PARANOID
+#endif
 
 /*----------------------------------------------------------------------*/
 /* Half of the main problem is done, there is just a reduced numerator
@@ -296,7 +296,7 @@ LPrevent_2nd_overflow:
 
 #ifdef PARANOID
 	je	L_bugged_2	/* Can't bump the result to 1.0 */
-#endif PARANOID
+#endif
 
 LDo_2nd_div:
 	cmpl	$0,%ecx		/* augmented denom msw */
@@ -319,7 +319,7 @@ LSecond_div_done:
 
 #ifdef PARANOID
 	jc	L_bugged_2
-#endif PARANOID
+#endif
 
 	movl	FPU_result_1,%eax	/* Get the result back */
 	mull	SIGL(%ebx)	/* now mul the ls dw of the denom */
@@ -330,14 +330,14 @@ LSecond_div_done:
 
 #ifdef PARANOID
 	jc	L_bugged_2
-#endif PARANOID
+#endif
 
 	jz	LDo_3rd_32_bits
 
 #ifdef PARANOID
 	cmpl	$1,FPU_accum_2
 	jne	L_bugged_2
-#endif PARANOID
+#endif
 
 	/* need to subtract another once of the denom */
 	movl	SIGL(%ebx),%eax
@@ -349,14 +349,14 @@ LSecond_div_done:
 #ifdef PARANOID
 	jc	L_bugged_2
 	jne	L_bugged_2
-#endif PARANOID
+#endif
 
 	addl	$1,FPU_result_1	/* Correct the answer */
 	adcl	$0,FPU_result_2
 
 #ifdef PARANOID
 	jc	L_bugged_2	/* Must check for non-zero result here */
-#endif PARANOID
+#endif
 
 /*----------------------------------------------------------------------*/
 /* The division is essentially finished here, we just need to perform
@@ -474,4 +474,4 @@ L_exit:
 
 	leave
 	ret
-#endif PARANOID
+#endif

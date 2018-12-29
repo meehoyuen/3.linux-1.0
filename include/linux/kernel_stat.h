@@ -23,4 +23,4 @@ struct kernel_stat {
 
 extern struct kernel_stat kstat;
 
-#endif /* _LINUX_KERNEL_STAT_H */
+#endif

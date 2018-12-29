@@ -196,7 +196,7 @@ static void seagate_reconnect_intr(int);
 
 #ifdef FAST
 static int fast = 1;
-#endif 
+#endif
 
 #ifdef SLOW_HANDSHAKE
 /* 
@@ -267,7 +267,7 @@ static inline void borken_wait(void) {
   	printk("scsi%d : borken timeout\n", hostno);
 #else
 	;
-#endif 
+#endif
 }
 
 #endif /* def SLOW_HANDSHAKE */
@@ -276,7 +276,7 @@ int seagate_st0x_detect (int hostnum)
 	{
 #ifndef OVERRIDE
 	int i,j;
-#endif 
+#endif
 static struct sigaction seagate_sigaction = {
 	&seagate_reconnect_intr,
 	0,
@@ -313,7 +313,7 @@ static struct sigaction seagate_sigaction = {
 #ifdef DEBUG
 	printk("Base address overridden to %x, controller type is %s\n",
 		base_address,controller_type == SEAGATE ? "SEAGATE" : "FD");
-#endif 
+#endif
 #else /* OVERIDE */	
 /*
  *	To detect this card, we simply look for the signature
@@ -943,7 +943,7 @@ connect_loop :
 		(((reselect == CAN_RECONNECT)
 #ifdef LINKED 
 		|| (reselect == LINKED_WRONG)
-#endif 
+#endif
 		)  ? CMD_ATTN : 0) ;
 	
 /*
@@ -957,7 +957,7 @@ connect_loop :
 
 #if ((DEBUG & PHASE_ETC) == PHASE_ETC)
 	printk("scsi%d : phase = INFORMATION TRANSFER\n", hostno);
-#endif  
+#endif
 
 	incommand = 1;
 	transfersize = SCint->transfersize;
@@ -1395,7 +1395,7 @@ if (fast && transfersize && !(len % transfersize) && (len >= transfersize)
 				current_nobuffs = nobuffs;
 #if (DEBUG & PHASE_MSGIN)
 				printk("scsi%d : pointers saved.\n", hostno);
-#endif 
+#endif
 				break;
 			case RESTORE_POINTERS:
 				buffer=current_buffer;

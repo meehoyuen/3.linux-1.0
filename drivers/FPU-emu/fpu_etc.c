@@ -60,10 +60,10 @@ static void ftst_(void)
 	  /* This is wierd! */
 	  if (FPU_st0_ptr->sign == SIGN_POS)
 	    setcc(SW_C3);
-#endif PECULIAR_486
+#endif
 	  return;
 	}
-#endif DENORM_OPERAND
+#endif
 
       break;
     case TW_NaN:

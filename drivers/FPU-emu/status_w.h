@@ -58,8 +58,8 @@
 #  define clear_C1()  { partial_status &= ~SW_C1; }
 # else
 #  define clear_C1()
-#endif PECULIAR_486
+#endif
 
-#endif __ASSEMBLER__
+#endif
 
-#endif _STATUS_H_
+#endif

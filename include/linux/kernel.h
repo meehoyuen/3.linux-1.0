@@ -61,7 +61,7 @@ asmlinkage int printk(const char * fmt, ...)
  */
 #define suser() (current->euid == 0)
 
-#endif /* __KERNEL__ */
+#endif
 
 #define SI_LOAD_SHIFT	16
 struct sysinfo {

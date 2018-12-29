@@ -38,7 +38,7 @@ normalize:
 	addl	$4,%esp
 
 L_ok:
-#endif PARANOID
+#endif
 
 	movl	SIGH(%ebx),%edx
 	movl	SIGL(%ebx),%eax
@@ -118,7 +118,7 @@ normalize_nuo:
 	addl	$4,%esp
 
 L_ok_nuo:
-#endif PARANOID
+#endif
 
 	movl	SIGH(%ebx),%edx
 	movl	SIGL(%ebx),%eax

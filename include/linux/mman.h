@@ -12,4 +12,4 @@
 #define MAP_FIXED        0x10      /* Interpret addr exactly */
 #define MAP_ANONYMOUS    0x20      /* don't use a file */
 
-#endif /* _LINUX_MMAN_H */
+#endif

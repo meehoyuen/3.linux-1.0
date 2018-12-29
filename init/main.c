@@ -93,7 +93,7 @@ extern void aha152x_setup(char *str, int *ints);
 extern void sound_setup(char *str, int *ints);
 #ifdef CONFIG_SBPCD
 extern void sbpcd_setup(char *str, int *ints);
-#endif //CONFIG_SBPCD
+#endif
 
 #ifdef CONFIG_SYSVIPC
 extern void ipc_init(void);
@@ -204,7 +204,7 @@ struct {
 #endif
 #ifdef CONFIG_SBPCD
 	{ "sbpcd=", sbpcd_setup },
-#endif //CONFIG_SBPCD
+#endif
 	{ 0, 0 }
 };
 
@@ -304,9 +304,9 @@ static void parse_options(char *line)
 			console_loglevel = 10;
 		else if (!strcmp(line,"no387")) {
 			hard_math = 0;
-			__asm__("pushl %%eax; movl %%cr0,%%eax\n\t"
+			__asm__("movl %%cr0,%%eax\n\t"
 				"orl $0xE,%%eax\n\t"
-				"movl %%eax,%%cr0; popl %%eax\n\t" :);
+				"movl %%eax,%%cr0\n\t" :);
 		} else
 			checksetup(line);
 		/*
@@ -454,7 +454,7 @@ asmlinkage void start_kernel(void)
 		__asm__("fldz ; fld1 ; fdiv %st,%st(1) ; fwait");
 		timer_active &= ~(1<<COPRO_TIMER);
 		if (!fpu_error)
-			printk("Ok, fpu using %x error reporting.\n",
+			printk("Ok, fpu using %s error reporting.\n",
 				ignore_irq13?"exception 16":"irq13");
 	}
 #ifndef CONFIG_MATH_EMULATION

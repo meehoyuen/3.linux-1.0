@@ -43,5 +43,5 @@
 #define _IOWR(c,d,t)	(IOC_INOUT | ((sizeof(t)<<16) & IOCSIZE_MASK) | \
 				     ((c)<<8) | (d))
 
-#endif /* _LINUX_IOCTL_H */
+#endif
 

@@ -36,7 +36,7 @@ int compare(FPU_REG const *b)
 #ifdef DENORM_OPERAND
 		| ((b->exp <= EXP_UNDER) ?
 		   COMP_Denormal : 0)
-#endif DENORM_OPERAND
+#endif
 		  ;
 	    }
 	}
@@ -49,7 +49,7 @@ int compare(FPU_REG const *b)
 #ifdef DENORM_OPERAND
 		| ((FPU_st0_ptr->exp <= EXP_UNDER )
 		   ? COMP_Denormal : 0 )
-#endif DENORM_OPERAND
+#endif
 		  ;
 	    }
 	}
@@ -63,7 +63,7 @@ int compare(FPU_REG const *b)
 #ifdef DENORM_OPERAND
 	      | (((b->tag == TW_Valid) && (b->exp <= EXP_UNDER)) ?
 		COMP_Denormal : 0 )
-#endif DENORM_OPERAND
+#endif
 ;
 	    }
 	  else if ( b->tag == TW_Infinity )
@@ -83,7 +83,7 @@ int compare(FPU_REG const *b)
 		| (((FPU_st0_ptr->tag == TW_Valid)
 		    && (FPU_st0_ptr->exp <= EXP_UNDER)) ?
 		   COMP_Denormal : 0)
-#endif DENORM_OPERAND
+#endif
 		  ;
 	    }
 	  /* Fall through to the NaN code */
@@ -108,7 +108,7 @@ int compare(FPU_REG const *b)
 #ifdef PARANOID
   if (!(FPU_st0_ptr->sigh & 0x80000000)) EXCEPTION(EX_Invalid);
   if (!(b->sigh & 0x80000000)) EXCEPTION(EX_Invalid);
-#endif PARANOID
+#endif
 
   
   if (FPU_st0_ptr->sign != b->sign)
@@ -118,7 +118,7 @@ int compare(FPU_REG const *b)
 	|
 	  ( ((FPU_st0_ptr->exp <= EXP_UNDER) || (b->exp <= EXP_UNDER)) ?
 	   COMP_Denormal : 0)
-#endif DENORM_OPERAND
+#endif
 	    ;
     }
 
@@ -142,7 +142,7 @@ int compare(FPU_REG const *b)
 	|
 	  ( ((FPU_st0_ptr->exp <= EXP_UNDER) || (b->exp <= EXP_UNDER)) ?
 	   COMP_Denormal : 0)
-#endif DENORM_OPERAND
+#endif
 	    ;
     }
   if ( diff < 0 )
@@ -152,7 +152,7 @@ int compare(FPU_REG const *b)
 	|
 	  ( ((FPU_st0_ptr->exp <= EXP_UNDER) || (b->exp <= EXP_UNDER)) ?
 	   COMP_Denormal : 0)
-#endif DENORM_OPERAND
+#endif
 	    ;
     }
 
@@ -161,7 +161,7 @@ int compare(FPU_REG const *b)
     |
       ( ((FPU_st0_ptr->exp <= EXP_UNDER) || (b->exp <= EXP_UNDER)) ?
        COMP_Denormal : 0)
-#endif DENORM_OPERAND
+#endif
 	;
 
 }
@@ -199,7 +199,7 @@ int compare_st_data(void)
 	EXCEPTION(EX_INTERNAL|0x121);
 	f = SW_C3 | SW_C2 | SW_C0;
 	break;
-#endif PARANOID
+#endif
       }
   setcc(f);
   if (c & COMP_Denormal)
@@ -249,7 +249,7 @@ static int compare_st_st(int nr)
 	EXCEPTION(EX_INTERNAL|0x122);
 	f = SW_C3 | SW_C2 | SW_C0;
 	break;
-#endif PARANOID
+#endif
       }
   setcc(f);
   if (c & COMP_Denormal)
@@ -304,7 +304,7 @@ static int compare_u_st_st(int nr)
 	EXCEPTION(EX_INTERNAL|0x123);
 	f = SW_C3 | SW_C2 | SW_C0;
 	break;
-#endif PARANOID
+#endif
       }
   setcc(f);
   if (c & COMP_Denormal)

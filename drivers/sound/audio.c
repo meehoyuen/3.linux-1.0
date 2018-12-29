@@ -111,20 +111,20 @@ extern inline void
 translate_bytes (const void *table, void *buff, unsigned long n)
 {
   __asm__ ("cld\n"
-	   "pushw %%ax\n\t"
-	   "pushw %%bx\n\t"
-	   "pushw %%cx\n\t"
-	   "pushw %%di\n\t"
-	   "pushw %%si\n\t"
+	   "pushl %%eax\n\t"
+	   "pushl %%ebx\n\t"
+	   "pushl %%ecx\n\t"
+	   "pushl %%edi\n\t"
+	   "pushl %%esi\n\t"
 	   "1:\tlodsb\n\t"
 	   "xlatb\n\t"
 	   "stosb\n\t"
 	   "loop 1b\n\t":
-	   "popw %%si\n\t"
-	   "popw %%di\n\t"
-	   "popw %%cx\n\t"
-	   "popw %%bx\n\t"
-	   "popw %%ax\n\t"
+	   "popl %%esi\n\t"
+	   "popl %%edi\n\t"
+	   "popl %%ecx\n\t"
+	   "popl %%ebx\n\t"
+	   "popl %%eax\n\t"
 	   :"b" ((long) table), "c" (n), "D" ((long) buff), "S" ((long) buff));
 }
 

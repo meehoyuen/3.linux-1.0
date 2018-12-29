@@ -40,10 +40,10 @@ static inline int find_first_zero_bit (unsigned long * addr, unsigned size)
 	if (!size)
 		return 0;
 	__asm__("cld\n\t"
-		"pushw %%ax\n\t"
-		"pushw %%bx\n\t"
-		"pushw %%cx\n\t"
-		"pushw %%di\n\t"
+		"pushl %%eax\n\t"
+		"pushl %%ebx\n\t"
+		"pushl %%ecx\n\t"
+		"pushl %%edi\n\t"
 		"movl $-1,%%eax\n\t"
 		"repe; scasl\n\t"
 		"je 1f\n\t"
@@ -56,10 +56,10 @@ static inline int find_first_zero_bit (unsigned long * addr, unsigned size)
 "2:		subl %%ebx,%%edi\n\t"
 		"shll $3,%%edi\n\t"
 		"addl %%edi,%%edx\n\t"
-		"popw %%di\n\t"
-		"popw %%cx\n\t"
-		"popw %%bx\n\t"
-		"popw %%ax\n\t"
+		"popl %%edi\n\t"
+		"popl %%ecx\n\t"
+		"popl %%ebx\n\t"
+		"popl %%eax\n\t"
 		: "=d" (res)
 		: "c" ((size + 31) >> 5), "D" (addr), "b" (addr));
 	return res;

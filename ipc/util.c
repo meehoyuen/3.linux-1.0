@@ -148,4 +148,4 @@ void shm_no_page (unsigned long *ptent)
     return;
 }
 
-#endif /* CONFIG_SYSVIPC */
+#endif

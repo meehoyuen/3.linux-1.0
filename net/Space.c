@@ -45,7 +45,7 @@ struct ddi_proto protocols[] = {
 #endif
 #ifdef CONFIG_AX25  
   { "AX.25",	ax25_proto_init },
-#endif  
+#endif
 #ifdef	CONFIG_INET
   { "INET",	inet_proto_init	},
 #endif

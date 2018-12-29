@@ -40,7 +40,7 @@ FPU_accum_0:
 	.long	0
 FPU_accum_1:
 	.long	0
-#endif REENTRANT_FPU
+#endif
 
 
 .text
@@ -52,7 +52,7 @@ reg_u_mul:
 	movl	%esp,%ebp
 #ifdef REENTRANT_FPU
 	subl	$8,%esp
-#endif REENTRANT_FPU
+#endif
 
 	pushl	%esi
 	pushl	%edi
@@ -66,7 +66,7 @@ reg_u_mul:
 	jz	L_bugged
 	testl	$0x80000000,SIGH(%edi)
 	jz	L_bugged
-#endif PARANOID
+#endif
 
 #ifdef DENORM_OPERAND
 	movl	EXP(%esi),%eax
@@ -87,7 +87,7 @@ xOp1_not_denorm:
 	jnz	fpu_Arith_exit
 
 xOp2_not_denorm:
-#endif DENORM_OPERAND
+#endif
 
 	xorl	%ecx,%ecx
 	xorl	%ebx,%ebx
@@ -159,5 +159,5 @@ L_exit:
 	popl	%esi
 	leave
 	ret
-#endif PARANOID
+#endif
 

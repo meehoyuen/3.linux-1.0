@@ -153,4 +153,4 @@ struct ifconf {
 #include <linux/if_arp.h>
 #include <linux/route.h>
 
-#endif /* _NET_IF_H */
+#endif

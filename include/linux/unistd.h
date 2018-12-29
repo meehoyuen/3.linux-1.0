@@ -225,4 +225,4 @@ errno=-__res; \
 return -1; \
 }
 
-#endif /* _LINUX_UNISTD_H */
+#endif

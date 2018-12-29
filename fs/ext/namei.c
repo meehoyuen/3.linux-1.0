@@ -65,14 +65,14 @@ static int ext_match(int len,const char * name,struct ext_dir_entry * de)
 	if (len < EXT_NAME_LEN && len != de->name_len)
 		return 0;
 	__asm__("cld\n\t"
-		"pushw %%cx\n\t"
-		"pushw %%di\n\t"
-		"pushw %%si\n\t"
+		"pushl %%ecx\n\t"
+		"pushl %%edi\n\t"
+		"pushl %%esi\n\t"
 		"repe ; cmpsb\n\t"
 		"setz %%al\n\t"
-		"popw %%si\n\t"
-		"popw %%di\n\t"
-		"popw %%cx\n\t"
+		"popl %%esi\n\t"
+		"popl %%edi\n\t"
+		"popl %%ecx\n\t"
 		:"=a" (same)
 		:"0" (0),"S" ((long) name),"D" ((long) de->name),"c" (len));
 	return same;

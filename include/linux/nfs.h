@@ -59,7 +59,7 @@ enum rpc_auth_stat {
 	RPC_AUTH_TOOWEAK = 5
 };
 
-#endif /* __KERNEL__ */
+#endif
 	
 enum nfs_stat {
 	NFS_OK = 0,

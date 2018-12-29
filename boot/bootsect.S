@@ -45,7 +45,7 @@ SWAP_DEV = 0
 #endif
 #ifndef RAMDISK
 #define RAMDISK 0
-#endif 
+#endif
 #ifndef CONFIG_ROOT_RDONLY
 #define CONFIG_ROOT_RDONLY 0
 #endif

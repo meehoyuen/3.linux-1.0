@@ -52,5 +52,5 @@ extern inline void unlock_super(struct super_block * sb)
 	wake_up(&sb->s_wait);
 }
 
-#endif /* _LINUX_LOCKS_H */
+#endif
 

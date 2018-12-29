@@ -133,7 +133,6 @@ static struct super_block * read_super(dev_t dev,char *name,int flags,
 
 	if (!dev)
 		return NULL;
-printk(KERN_NOTICE "read_super:%d dev:%x  s:%x\n",__LINE__,dev,s);
 	check_disk_change(dev);
 printk(KERN_NOTICE "read_super:%d dev:%x  s:%x\n",__LINE__,dev,s);
 	s = get_super(dev);
@@ -152,13 +151,12 @@ printk(KERN_NOTICE "read_super:%d dev:%x  s:%x\n",__LINE__,dev,s);
 	}
 	s->s_dev = dev;
 	s->s_flags = flags;
-printk(KERN_NOTICE "read_super:%d dev:%x  s:%x\n",__LINE__,dev,s);
 	if (!type->read_super(s,data, silent)) {
 		s->s_dev = 0;
-printk(KERN_NOTICE "read_super:%d s:%x\n",__LINE__,s);
-		return 0;
+printk(KERN_NOTICE "read_super:%d dev:%x  s:%x\n",__LINE__,dev,s);
+		return NULL;
 	}
-printk(KERN_NOTICE "read_super:%d s:%x\n",__LINE__,s);
+printk(KERN_NOTICE "read_super:%d dev:%x  s:%x\n",__LINE__,dev,s);
 	s->s_dev = dev;
 	s->s_covered = NULL;
 	s->s_rd_only = 0;

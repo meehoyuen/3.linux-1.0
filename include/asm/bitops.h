@@ -103,5 +103,5 @@ extern __inline__ int test_bit(int nr, int * addr)
 	mask = 1 << (nr & 0x1f);
 	return ((mask & *addr) != 0);
 }
-#endif	/* i386 */
-#endif /* _ASM_BITOPS_H */
+#endif
+#endif

@@ -62,7 +62,7 @@ void	poly_tan(FPU_REG const *arg, FPU_REG *result, int invert)
 #ifdef PARANOID
   if ( arg->sign != 0 )	/* Can't hack a number < 0.0 */
     { arith_invalid(result); return; }  /* Need a positive number */
-#endif PARANOID
+#endif
 
   arg_signif = significand(arg);
   if ( exponent < -1 )

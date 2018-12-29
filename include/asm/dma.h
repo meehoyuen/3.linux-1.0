@@ -261,4 +261,4 @@ extern int request_dma(unsigned int dmanr);	/* reserve a DMA channel */
 extern void free_dma(unsigned int dmanr);	/* release it again */
 
 
-#endif /* _ASM_DMA_H */
+#endif

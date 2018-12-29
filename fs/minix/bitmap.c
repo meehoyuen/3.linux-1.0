@@ -16,21 +16,21 @@
 
 #define clear_block(addr) \
 __asm__("cld\n\t" \
-	"pushw %%cx\n\t" \
-	"pushw %%di\n\t" \
+	"pushl %%ecx\n\t" \
+	"pushl %%edi\n\t" \
 	"rep\n\t" \
 	"stosl\n\t" \
-	"popw %%di\n\t" \
-	"popw %%cx\n\t" \
+	"popl %%edi\n\t" \
+	"popl %%ecx\n\t" \
 	: \
 	:"a" (0),"c" (BLOCK_SIZE/4),"D" ((long) (addr)))
 
 #define find_first_zero(addr) ({ \
 int __res; \
 __asm__("cld\n" \
-	"pushw %%ax\n\t" \
-	"pushw %%dx\n\t" \
-	"pushw %%si\n\t" \
+	"pushl %%eax\n\t" \
+	"pushl %%edx\n\t" \
+	"pushl %%esi\n\t" \
 	"1:\tlodsl\n\t" \
 	"notl %%eax\n\t" \
 	"bsfl %%eax,%%edx\n\t" \
@@ -40,9 +40,9 @@ __asm__("cld\n" \
 	"jl 1b\n\t" \
 	"xorl %%edx,%%edx\n\t" \
 	"2:\taddl %%edx,%%ecx\n\t" \
-	"popw %%si\n\t\" \
-	"popw %%dx\n\t" \
-	"popw %%ax\n\t" \
+	"popl %%esi\n\t\" \
+	"popl %%edx\n\t" \
+	"popl %%eax\n\t" \
 	:"=c" (__res):"0" (0),"S" (addr)); \
 __res;})
 

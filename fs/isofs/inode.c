@@ -32,7 +32,7 @@ extern int check_mcd_media_change(int, int);
 #endif
 #if defined (CONFIG_SBPCD)
 extern int check_sbpcd_media_change(int, int);
-#endif CONFIG_SBPCD
+#endif
 
 #ifdef LEAK_CHECK
 static int check_malloc = 0;
@@ -296,7 +296,7 @@ struct super_block *isofs_read_super(struct super_block *s,void *data,
 		if (check_sbpcd_media_change(s->s_dev,0))
 		  goto out;
 	};
-#endif CONFIG_SBPCD
+#endif
 
 	return s;
  out: /* Kick out for various error conditions */

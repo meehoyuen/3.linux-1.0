@@ -103,7 +103,7 @@ extern void trap_init(void);
 
 asmlinkage void schedule(void);
 
-#endif /* __KERNEL__ */
+#endif
 
 struct i387_hard_struct {
 	long	cwd;
@@ -237,7 +237,7 @@ struct task_struct {
 	unsigned long swap_cnt;		/* number of pages to swap on next pass */
 	short swap_table;		/* current page table */
 	short swap_page;		/* current page */
-#endif //NEW_SWAP
+#endif
 	struct vm_area_struct *stk_vma;
 };
 
@@ -357,7 +357,7 @@ __asm__("str %%ax\n\t" \
  * tha math co-processor latest.
  */
 #define switch_to(tsk) \
-__asm__("cmpl %%ecx,current\n\t" \
+__asm__("pushl %%ecx; cmpl %%ecx,current\n\t" \
 	"je 1f\n\t" \
 	"cli\n\t" \
 	"xchgl %%ecx,current\n\t" \
@@ -366,33 +366,33 @@ __asm__("cmpl %%ecx,current\n\t" \
 	"cmpl %%ecx,last_task_used_math\n\t" \
 	"jne 1f\n\t" \
 	"clts\n" \
-	"1:" \
+	"1:popl %%ecx\n" \
 	: /* no output */ \
 	:"m" (*(((char *)&tsk->tss.tr)-4)), \
-	 "c" (tsk):"cx")
+	 "c" (tsk))
 
 #define _set_base(addr,base) \
-__asm__("movw %%dx,%0\n\t" \
+__asm__("pushl %%edx; movw %%dx,%0\n\t" \
 	"rorl $16,%%edx\n\t" \
 	"movb %%dl,%1\n\t" \
-	"movb %%dh,%2" \
+	"movb %%dh,%2; popl %%edx\n" \
 	: /* no output */ \
 	:"m" (*((addr)+2)), \
 	 "m" (*((addr)+4)), \
 	 "m" (*((addr)+7)), \
-	 "d" (base):"dx")
+	 "d" (base))
 
 #define _set_limit(addr,limit) \
-__asm__("movw %%dx,%0\n\t" \
+__asm__("pushl %%edx; movw %%dx,%0\n\t" \
 	"rorl $16,%%edx\n\t" \
 	"movb %1,%%dh\n\t" \
 	"andb $0xf0,%%dh\n\t" \
 	"orb %%dh,%%dl\n\t" \
-	"movb %%dl,%1" \
+	"movb %%dl,%1; popl %%edx\n" \
 	: /* no output */ \
 	:"m" (*(addr)), \
 	 "m" (*((addr)+6)), \
-	 "d" (limit):"dx")
+	 "d" (limit))
 
 #define set_base(ldt,base) _set_base( ((char *)&(ldt)) , base )
 #define set_limit(ldt,limit) _set_limit( ((char *)&(ldt)) , (limit-1)>>12 )
@@ -558,9 +558,9 @@ extern struct desc_struct default_ldt;
 /* This special macro can be used to load a debugging register */
 
 #define loaddebug(register) \
-		__asm__("movl %0,%%edx\n\t" \
-			"movl %%edx,%%db" #register "\n\t" \
+		__asm__("pushl %%edx; movl %0,%%edx\n\t" \
+			"movl %%edx,%%db" #register "; popl %%edx\n\t" \
 			: /* no output */ \
-			:"m" (current->debugreg[register]):"dx")
+			:"m" (current->debugreg[register]))
 
 #endif

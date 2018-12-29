@@ -144,7 +144,7 @@ sl_initialize(struct slip *sl, struct device *dev)
 #else
   sl->mode		= SL_MODE_SLIP;		/* Default for non compressors */
 #endif
-#endif  
+#endif
 
   sl->line		= dev->base_addr;
   sl->tty		= NULL;
@@ -496,7 +496,7 @@ sl_encaps(struct slip *sl, unsigned char *icp, int len)
   	count=slip_esc6(p, (unsigned char *)sl->xbuff,len);
   else
   	count=slip_esc(p, (unsigned char *)sl->xbuff,len);
-#endif  	  
+#endif
   sl->spacket++;
   bp = sl->xbuff;
 
@@ -563,7 +563,7 @@ sl_xmit(struct sk_buff *skb, struct device *dev)
 		}
 		skb->arp=1;
 	}
-#endif  	
+#endif
 	sl_lock(sl);
 	size = skb->len;
 	if (!(sl->mode & SL_MODE_AX25)) {
@@ -604,7 +604,7 @@ sl_header(unsigned char *buff, struct device *dev, unsigned short type,
   struct slip *sl=&sl_ctrl[dev->base_addr];
   if((sl->mode&SL_MODE_AX25) && type!=NET16(ETH_P_AX25))
   	return ax25_encapsulate_ip(buff,dev,type,daddr,saddr,len);
-#endif  
+#endif
 
   return(0);
 }
@@ -632,7 +632,7 @@ sl_rebuild_header(void *buff, struct device *dev)
   
   if(sl->mode&SL_MODE_AX25)
   	return ax25_rebuild_header(buff,dev);
-#endif  
+#endif
   return(0);
 }
 
@@ -1205,7 +1205,7 @@ slip_init(struct device *dev)
 #ifdef CONFIG_AX25  
   memcpy(dev->broadcast,ax25_bcast,7);		/* Only activated in AX.25 mode */
   memcpy(dev->dev_addr,ax25_test,7);		/*    ""      ""       ""    "" */
-#endif  
+#endif
   dev->queue_xmit	= dev_queue_xmit;
   dev->rebuild_header	= sl_rebuild_header;
   for (i = 0; i < DEV_NUMBUFFS; i++)

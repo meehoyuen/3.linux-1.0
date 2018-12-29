@@ -268,7 +268,7 @@ udp_send(struct sock *sk, struct sockaddr_in *sin,
 #else
   if (skb->len > 4095)
   {
-#endif    
+#endif
 	printk("UDP: send: length %d > mtu %d (ignored)\n", len, dev->mtu);
 	sk->prot->wfree(sk, skb->mem_addr, skb->mem_len);
 	return(-EMSGSIZE);

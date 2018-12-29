@@ -64,7 +64,7 @@ static void extended_partition(struct gendisk *hd, int dev)
 			    !(hd->part[current_minor].nr_sects = p->nr_sects))
 				goto done;  /* shouldn't happen */
 			hd->part[current_minor].start_sect = this_sector + p->start_sect;
-			printk(" %x%c%d", hd->major_name,
+			printk(" %s%c%d", hd->major_name,
 				'a'+(current_minor >> hd->minor_shift),
 				mask & current_minor);
 			current_minor++;
@@ -107,7 +107,7 @@ static void check_partition(struct gendisk *hd, unsigned int dev)
 		printk("  unable to read partition table of device %04x\n",dev);
 		return;
 	}
-	printk("  %x%c:", hd->major_name, 'a'+(minor >> hd->minor_shift));
+	printk("  %s%c:", hd->major_name, 'a'+(minor >> hd->minor_shift));
 	current_minor += 4;  /* first "extra" minor */
 	if (*(unsigned short *) (bh->b_data+510) == 0xAA55) {
 		p = (struct partition *) (0x1BE + bh->b_data);
@@ -115,7 +115,7 @@ static void check_partition(struct gendisk *hd, unsigned int dev)
 			if (!(hd->part[minor].nr_sects = p->nr_sects))
 				continue;
 			hd->part[minor].start_sect = first_sector + p->start_sect;
-			printk(" %x%c%d", hd->major_name,'a'+(minor >> hd->minor_shift), i);
+			printk(" %s%c%d", hd->major_name,'a'+(minor >> hd->minor_shift), i);
 			if ((current_minor & 0x3f) >= 60)
 				continue;
 			if (p->sys_ind == EXTENDED_PARTITION) {
@@ -137,7 +137,7 @@ static void check_partition(struct gendisk *hd, unsigned int dev)
 					continue;
 				hd->part[current_minor].start_sect = p->start_sect;
 				hd->part[current_minor].nr_sects = p->nr_sects;
-				printk(" %x%c%d", hd->major_name,
+				printk(" %s%c%d", hd->major_name,
 					'a'+(current_minor >> hd->minor_shift),
 					current_minor & mask);
 			}

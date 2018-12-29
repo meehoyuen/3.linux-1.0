@@ -190,7 +190,7 @@ asmlinkage void math_emulate(long arg)
   schedule();
 }
 
-#endif /* CONFIG_MATH_EMULATION */
+#endif
 
 unsigned long itimer_ticks = 0;
 unsigned long itimer_next = ~0;
@@ -216,8 +216,7 @@ asmlinkage void schedule(void)
 	unsigned long ticks;
 
 /* check alarm, wake up any interruptible tasks that have got a signal */
-return;
-//printk("schedule skipped\n");
+
 	if (intr_count) {
 		printk("Aiee: scheduling in interrupt\n");
 		intr_count = 0;

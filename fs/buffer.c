@@ -538,6 +538,7 @@ void brelse(struct buffer_head * buf)
 struct buffer_head * bread(dev_t dev, int block, int size)
 {
 	struct buffer_head * bh;
+
 	if (!(bh = getblk(dev, block, size))) {
 		printk("VFS: bread: READ error on device %d/%d\n",
 						MAJOR(dev), MINOR(dev));
@@ -545,7 +546,7 @@ struct buffer_head * bread(dev_t dev, int block, int size)
 	}
 	if (bh->b_uptodate)
 		return bh;
-dev=0x0300;
+
 	ll_rw_block(READ, 1, &bh);
 	wait_on_buffer(bh);
 printk("bread:%d,dev:%hx\n",__LINE__,dev);

@@ -111,7 +111,7 @@ typedef struct fd_set {
 
 #undef	__FD_ZERO
 #define __FD_ZERO(fdsetp) \
-		__asm__ __volatile__("cld ; pushw %%cx; pushw %%di; rep ; stosl; popw %%di; popw %%cx" \
+		__asm__ __volatile__("cld ; pushl %%ecx; pushl %%edi; rep ; stosl; popl %%edi; popl %%ecx" \
 			:"=m" (*(fd_set *) (fdsetp)) \
 			:"a" (0), "c" (__FDSET_LONGS), \
 			"D" ((fd_set *) (fdsetp)))

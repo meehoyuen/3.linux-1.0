@@ -429,7 +429,7 @@ int floppy_change(struct buffer_head * bh)
 }
 
 #define copy_buffer(from,to) \
-__asm__("pushw %%cx; pushw %%di; pushw %%si; cld ; rep ; movsl; popw %%si; popw %%di; popw %%cx" \
+__asm__("pushl %%ecx; pushl %%edi; pushl %%esi; cld ; rep ; movsl; popl %%esi; popl %%edi; popl %%ecx" \
 	: \
 	:"c" (BLOCK_SIZE/4),"S" ((long)(from)),"D" ((long)(to)))
 

@@ -149,7 +149,7 @@ struct sock {
   char				ax25_rrtimer;
   char				ax25_timer;
   ax25_digi			*ax25_digipeat;
-#endif  
+#endif
 /* IP 'private area' or will be eventually */
   int				ip_ttl;		/* TTL setting */
   int				ip_tos;		/* TOS */

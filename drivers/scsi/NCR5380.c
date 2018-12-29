@@ -1289,7 +1289,7 @@ static int NCR5380_select (struct Scsi_Host *instance, Scsi_Cmnd *cmd,
     hostdata->connected = cmd;
 #ifdef SCSI2
     if (!scsi_devices[cmd->index].tagged_queue)
-#endif    
+#endif
 	hostdata->busy[cmd->target] |= (1 << cmd->lun);
 
     initialize_SCp(cmd);
@@ -1612,7 +1612,7 @@ static int NCR5380_transfer_dma (struct Scsi_Host *instance,
       NCR5380_transfer_pio(instance, phase, &cnt, data);
       *count -= toPIO - cnt;
     }
-#endif        
+#endif
 
 #if (NDEBUG & NDEBUG_DMA)
      printk("Return with data ptr = 0x%X, count %d, last 0x%X, next 0x%X\n",
@@ -2006,7 +2006,7 @@ static void NCR5380_information_transfer (struct Scsi_Host *instance) {
 		    msgout = MESSAGE_REJECT;
 		    NCR5380_write(INITIATOR_COMMAND_REG, ICR_BASE | 
 			ICR_ASSERT_ATN);
-#endif 
+#endif
 		    break;
 		} /* switch (tmp) */
 		break;

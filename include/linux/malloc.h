@@ -27,4 +27,4 @@ void kfree_s(void * obj, int size);
 
 #endif
 
-#endif /* _LINUX_MALLOC_H */
+#endif

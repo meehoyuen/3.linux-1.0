@@ -206,4 +206,4 @@ struct kbdiacrs {
 /* note: 0x4B60 and 0x4B61 used above for GIO_FONT and PIO_FONT
          0x4B62 and 0x4B63 used above for KDGKBMETA and KDSKBMETA */
 
-#endif /* _LINUX_KD_H */
+#endif

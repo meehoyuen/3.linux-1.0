@@ -30,7 +30,7 @@ struct xiafs_sb_info {
     u_char   s_zmap_cached;			/* flag for cached imap */
 };
 
-#endif /* _XIA_FS_SB_H */
+#endif
 
 
 

@@ -152,5 +152,5 @@ struct	mtpos {
  * I think DDS drives are DAT drives.
  */
 
-#endif /* _LINUX_MTIO_H */
+#endif
 

@@ -1114,7 +1114,11 @@ void mem_init(unsigned long start_low_mem,
 	pg0[0] = PAGE_READONLY;
 printk("mem_map:%x, pg0:%x\n", mem_map, pg0);
 	invalidate();
-	__asm__ __volatile__("movb 0,%%al ; movb %%al,0":::"ax","memory");
+	{
+		char *pchar = 0;
+		char  ptmp;
+		__asm__ __volatile__("movb %2,%0 ; movb %0,%1":"=a"(ptmp),"=m"(pchar):"1"(pchar));
+	}
 	pg0[0] = 0;
 	invalidate();
 	if (wp_works_ok < 0)

@@ -871,7 +871,7 @@ int aha1542_detect(int hostnum)
 			    cmd[9] = 0;
 			    aha1542_command(0, cmd, buffer, 512);
 		    }
-#endif    
+#endif
 		    snarf_region(bases[indx], 4);  /* Register the IO ports that we use */
 		    count++;
 		    continue;

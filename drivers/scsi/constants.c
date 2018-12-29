@@ -92,7 +92,7 @@ static void print_opcode(int opcode) {
 static void print_opcode(int opcode) {
   printk("0x%02x ", opcode);
 }
-#endif  
+#endif
 
 void print_command (unsigned char *command) {
   int i,s;
@@ -117,7 +117,7 @@ void print_status (int status) {
   printk("%s ",statuses[status]);
 #else
   printk("0x%0x ", status); 
-#endif 
+#endif
 }
 
 #if (CONSTANTS & CONST_XSENSE)

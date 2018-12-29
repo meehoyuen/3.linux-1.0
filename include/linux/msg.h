@@ -69,6 +69,6 @@ struct msginfo {
 #define MSG_STAT 11
 #define MSG_INFO 12
 
-#endif /* __KERNEL__ */
+#endif
 
-#endif /* _LINUX_MSG_H */
+#endif

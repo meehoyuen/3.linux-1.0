@@ -75,7 +75,7 @@
 	#define DEBUG_READWRITE	/* debug each read/write command */
 	#define DEBUG_OTHER	/* debug misc. interrupt/DMA stuff */
 	#define DEBUG_COMMAND	/* debug each controller command */
-#endif /* DEBUG */
+#endif
 
 /* this structure defines the XT drives and their types */
 typedef struct {
@@ -136,4 +136,4 @@ static void xd_omti_init_drive (u_char drive);
 static void xd_setparam (u_char command,u_char drive,u_char heads,u_short cylinders,u_short rwrite,u_short wprecomp,u_char ecc);
 static void xd_override_init_drive (u_char drive);
 
-#endif /* _LINUX_XD_H */
+#endif

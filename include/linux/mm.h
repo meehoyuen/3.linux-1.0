@@ -113,16 +113,12 @@ extern inline unsigned long get_free_page(int priority)
 	unsigned long page;
 
 	page = __get_free_page(priority);
-	printk("get free page:0x%x\n",page);
 	if (page)
 	{
 		int i=0;
-		while(i<1024)
-		*(int *)(page+i++*4)=0;
+		while(i<1024)*((int*)page+i++)=0;
 	}
-//		__asm__ __volatile__("xorl %%eax,%%eax;movl $1024,%%ecx;movl %0,%%edi;rep ; stosl"
-//			: /* no outputs */ \
-//			:"m" (page));
+
 	return page;
 }
 

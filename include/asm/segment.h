@@ -212,4 +212,4 @@ static inline void set_fs(unsigned long val)
 	__asm__ __volatile__("mov %w0,%%fs": /* no output */ :"r" (val));
 }
 
-#endif /* _ASM_SEGMENT_H */
+#endif

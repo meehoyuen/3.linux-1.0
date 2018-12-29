@@ -829,7 +829,7 @@ inet_create(struct socket *sock, int protocol)
   sk->nonagle = 1;
 #else    
   sk->nonagle = 0;
-#endif  
+#endif
   sk->type = sock->type;
   sk->protocol = protocol;
   sk->wmem_alloc = 0;

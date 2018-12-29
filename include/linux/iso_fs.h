@@ -210,7 +210,7 @@ extern void * leak_check_malloc(unsigned int size);
 extern void leak_check_free_s(void * obj, int size);
 extern struct buffer_head * leak_check_bread(int dev, int block, int size);
 extern void leak_check_brelse(struct buffer_head * bh);
-#endif /* LEAK_CHECK */
+#endif
 
 #endif
 

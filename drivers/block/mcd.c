@@ -110,7 +110,7 @@ check_mcd_media_change(int full_dev, int flag)
 
 #if 1	 /* the below is not reliable */
    return 0;
-#endif  
+#endif
    target = MINOR(full_dev);
 
    if (target > 0) {

@@ -179,7 +179,7 @@ static inline void do_gettimeofday(struct timeval *tv)
 	cli();
 	*tv = xtime;
 	sti();
-#endif /* not __i386__ */
+#endif
 }
 
 asmlinkage int sys_gettimeofday(struct timeval *tv, struct timezone *tz)

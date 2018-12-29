@@ -21,7 +21,7 @@
 
 #ifdef CONFIG_SBPCD
 extern u_long sbpcd_init(u_long, u_long);
-#endif CONFIG_SBPCD
+#endif
 
 /*
  * The request-struct contains all necessary data
@@ -356,7 +356,7 @@ void ll_rw_block(int rw, int nr, struct buffer_head * bh[])
 		if (--nr <= 0)
 			return;
 	};
-printk("ll_rw_block :%d\n",__LINE__);
+printk("ll_rw_block :%d dev:%x\n",__LINE__,bh[0]->b_dev);
 	dev = NULL;
 	if ((major = MAJOR(bh[0]->b_dev)) < MAX_BLKDEV)
 		dev = blk_dev + major;
@@ -500,7 +500,7 @@ long blk_dev_init(long mem_start, long mem_end)
 #endif
 #ifdef CONFIG_SBPCD
 	mem_start = sbpcd_init(mem_start, mem_end);
-#endif CONFIG_SBPCD
+#endif
 	if (ramdisk_size)
 		mem_start += rd_init(mem_start, ramdisk_size*1024);
 	return mem_start;

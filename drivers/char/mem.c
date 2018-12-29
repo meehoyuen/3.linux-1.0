@@ -421,6 +421,6 @@ long chr_dev_init(long mem_start, long mem_end)
         printk( "ftape: allocated %d buffers alligned at: %p\n",
                NR_FTAPE_BUFFERS, ftape_big_buffer);
         mem_start = (long) ftape_big_buffer + NR_FTAPE_BUFFERS * 0x8000;
-#endif 
+#endif
 	return mem_start;
 }

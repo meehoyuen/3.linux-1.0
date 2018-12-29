@@ -59,7 +59,7 @@ xOp1_not_denorm:
 	jnz	fpu_Arith_exit
 
 xOp2_not_denorm:
-#endif DENORM_OPERAND
+#endif
 
 	movl	EXP(%esi),%ecx
 	subl	EXP(%edi),%ecx	/* exp1 - exp2 */
@@ -73,7 +73,7 @@ xOp2_not_denorm:
 
 	testl	$0x80000000,SIGH(%esi)
 	je	L_bugged_2
-#endif PARANOID
+#endif
 
 /*--------------------------------------+
  |	Form a register holding the     |
@@ -186,7 +186,7 @@ L_subtr:
 #ifdef PARANOID
 	/* We can never get a borrow */
 	jc	L_bugged
-#endif PARANOID
+#endif
 
 /*--------------------------------------+
  |	Normalize the result		|
@@ -220,7 +220,7 @@ L_must_be_zero:
 #ifdef PARANOID
 	orl	%edx,%edx
 	jnz	L_bugged_3
-#endif PARANOID
+#endif
 
 	/* The result is zero */
 	movb	TW_Zero,TAG(%edi)
@@ -279,7 +279,7 @@ L_bugged:
 	call	EXCEPTION
 	pop	%ebx
 	jmp	L_error_exit
-#endif PARANOID
+#endif
 
 
 L_error_exit:

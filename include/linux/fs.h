@@ -411,6 +411,6 @@ extern int generic_mmap(struct inode *, struct file *, unsigned long, size_t, in
 extern int block_fsync(struct inode *, struct file *);
 extern int file_fsync(struct inode *, struct file *);
 
-#endif /* __KERNEL__ */
+#endif
 
 #endif

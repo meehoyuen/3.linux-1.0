@@ -32,10 +32,10 @@
 extern inline void memzero (void * s, size_t count)
 {
 __asm__("cld\n\t"
-	"pushw %%cx; pushw %%di\n\t"
+	"pushl %%ecx; push %%edi\n\t"
 	"rep\n\t"
 	"stosl\n\t"
-	"popw %%di; popw %%cx\n\t"
+	"popl %%edi; pop %%ecx\n\t"
 	:
 	:"a" (0),"D" (s),"c" (count/4): "memory");
 }

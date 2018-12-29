@@ -17,7 +17,7 @@ struct exec
   unsigned a_drsize;		/* length of relocation info for data, in bytes */
 };
 
-#endif /* __STRUCT_EXEC_OVERRIDE__ */
+#endif
 
 /* these go in the N_MACHTYPE field */
 enum machine_type {
@@ -167,7 +167,7 @@ struct nlist {
   short n_desc;
   unsigned long n_value;
 };
-#endif /* no N_NLIST_DECLARED.  */
+#endif
 
 #if !defined (N_UNDF)
 #define N_UNDF 0
@@ -264,7 +264,7 @@ struct relocation_info
   unsigned int r_pad:4;
 #endif
 };
-#endif /* no N_RELOCATION_INFO_DECLARED.  */
+#endif
 
 
-#endif /* __A_OUT_GNU_H__ */
+#endif

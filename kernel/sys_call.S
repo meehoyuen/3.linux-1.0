@@ -194,7 +194,6 @@ system_call:
 1:	call syscall_trace
 
 	.align 4,0x90
-
 ret_from_sys_call:
 	cmpl $0,intr_count
 	jne 2f

@@ -97,7 +97,7 @@ FPU_bits_lost:
 	.byte	0
 FPU_denormal:
 	.byte	0
-#endif REENTRANT_FPU
+#endif
 
 
 .text
@@ -129,13 +129,13 @@ fpu_reg_round_sqrt:		/* Entry point from wm_sqrt.S */
 
 #ifdef REENTRANT_FPU
 	pushl	%ebx		/* adjust the stack pointer */
-#endif REENTRANT_FPU
+#endif
 
 #ifdef PARANOID
 /* Cannot use this here yet */
 /*	orl	%eax,%eax */
 /*	jns	L_entry_bugged */
-#endif PARANOID
+#endif
 
 	cmpl	EXP_UNDER,EXP(%edi)
 	jle	xMake_denorm			/* The number is a de-normal */
@@ -163,12 +163,12 @@ xDenorm_done:
 	je	LRound_To_64
 #ifdef PARANOID
 	jmp	L_bugged_denorm_486
-#endif PARANOID
+#endif
 #else
 #ifdef PARANOID
 	jmp	L_bugged_denorm	/* There is no bug, just a bad control word */
-#endif PARANOID
-#endif PECULIAR_486
+#endif
+#endif
 
 
 /* Round etc to 24 bit precision */
@@ -189,7 +189,7 @@ LRound_To_24:
 
 #ifdef PARANOID
 	jmp	L_bugged_round24
-#endif PARANOID
+#endif
 
 LUp_24:
 	cmpb	SIGN_POS,SIGN(%edi)
@@ -269,7 +269,7 @@ LRound_To_53:
 
 #ifdef PARANOID
 	jmp	L_bugged_round53
-#endif PARANOID
+#endif
 
 LUp_53:
 	cmpb	SIGN_POS,SIGN(%edi)
@@ -343,7 +343,7 @@ LRound_To_64:
 
 #ifdef PARANOID
 	jmp	L_bugged_round64
-#endif PARANOID
+#endif
 
 LUp_64:
 	cmpb	SIGN_POS,SIGN(%edi)
@@ -419,7 +419,7 @@ xL_Store_significand:
 fpu_reg_round_exit:
 #ifdef REENTRANT_FPU
 	popl	%ebx		/* adjust the stack pointer */
-#endif REENTRANT_FPU
+#endif
 
 fpu_Arith_exit:
 	popl	%ebx
@@ -555,7 +555,7 @@ xNormalise_result:
 	/* But check it... just in case. */
 	cmpl	EXP_UNDER+1,EXP(%edi)
 	jne	L_norm_bugged
-#endif PARANOID
+#endif
 
 #ifdef PECULIAR_486
 	/*
@@ -568,7 +568,7 @@ xNormalise_result:
 	 */
 	orl	%eax,%eax		/* ms bits */
 	js	LNormalise_shift_done	/* Will be masked underflow */
-#endif PECULIAR_486
+#endif
 
 	orl	%eax,%eax		/* ms bits */
 	js	xL_Normalised		/* No longer a denormal */
@@ -665,7 +665,7 @@ L_bugged_denorm:
 	call	EXCEPTION
 	popl	%ebx
 	jmp	L_exception_exit
-#endif PECULIAR_486
+#endif
 
 L_bugged_round24:
 	pushl	EX_INTERNAL|0x231
@@ -698,4 +698,4 @@ L_entry_bugged:
 L_exception_exit:
 	mov	$1,%eax
 	jmp	fpu_reg_round_exit
-#endif PARANOID
+#endif
