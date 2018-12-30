@@ -223,7 +223,7 @@ asmlinkage int sys_fork(struct pt_regs regs)
 
 	p->counter = current->counter >> 1;
 	p->state = TASK_RUNNING;	/* do this last, just in case */
-printk("fork pid:%d\n",p->pid);
+//printk("fork pid:%d\n",p->pid);
 	return p->pid;
 bad_fork_cleanup:
 	task[nr] = NULL;

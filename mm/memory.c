@@ -891,10 +891,10 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long error_code)
 
 	/* get the address */
 	__asm__("movl %%cr2,%0":"=r" (address));
-printk("page fault addr:%x\n",address);
+//printk("page fault addr:%x\n",address);
 	if (address < TASK_SIZE) {
 		if (error_code & 4) {	/* user mode access? */
-printk("page fault addr:%x user mode\n",address);
+//printk("page fault addr:%x user mode\n",address);
 			if (regs->eflags & VM_MASK) {
 				bit = (address - 0xA0000) >> PAGE_SHIFT;
 				if (bit < 32)
@@ -904,7 +904,7 @@ printk("page fault addr:%x user mode\n",address);
 		}
 		if (error_code & 1)
 		{
-			printk("page fault addr:%x write protected\n",address);
+			//printk("page fault addr:%x write protected\n",address);
 			do_wp_page(error_code, address, current, user_esp);
 		}
 		else

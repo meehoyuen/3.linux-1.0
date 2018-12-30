@@ -34,7 +34,7 @@
 
 #define MAJOR_NR HD_MAJOR
 #include "blk.h"
-#define DEBUG 1
+//#define DEBUG 1
 #define HD_IRQ 14
 
 static int revalidate_hddisk(int, int);

@@ -560,8 +560,8 @@ void free_page(unsigned long addr)
 				nr--; \
 last_free_pages[index = (index + 1) & (NR_LAST_FREE_PAGES - 1)] = result; \
 				restore_flags(flag); \
-			printk("got free page %08lx map=%d\n", \
-				result,mem_map[MAP_NR(result)]); \
+			/*printk("got free page %08lx map=%d\n", \
+				result,mem_map[MAP_NR(result)]);*/ \
 				return result; \
 			} \
 			printk("Free page %08lx has mem_map = %d\n", \

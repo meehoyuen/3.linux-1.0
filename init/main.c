@@ -496,6 +496,7 @@ void init(void)
 	(void) open("/dev/tty1",O_RDWR,0);
 	(void) dup(0);
 	(void) dup(0);
+	execve("/bin/bash",argv_init,envp_init);
 	execve("/etc/init",argv_init,envp_init);
 	execve("/bin/init",argv_init,envp_init);
 	execve("/sbin/init",argv_init,envp_init);
