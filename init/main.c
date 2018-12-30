@@ -401,7 +401,7 @@ asmlinkage void start_kernel(void)
 	memory_start = chr_dev_init(memory_start,memory_end);
 	memory_start = blk_dev_init(memory_start,memory_end);
 	sti();
-	calibrate_delay();
+	//calibrate_delay();
 #ifdef CONFIG_INET
 	memory_start = net_dev_init(memory_start,memory_end);
 #endif
@@ -457,20 +457,12 @@ asmlinkage void start_kernel(void)
 	system_utsname.machine[1] = '0' + x86;
 	printk(linux_banner);
 
-	//move_to_user_mode();
-//asm volatile("push %%ebx;again:cmpl $88,%%ebx; jne again;pop %%ebx":);
-	if (!sys_fork())		/* we count on this going ok */
+	move_to_user_mode();
+	if (!fork())		/* we count on this going ok */
 	{
-		printk("after fork child\n");
-		printk("after fork child\n");
-		printk("after fork child\n");
-		printk("after fork child\n");
-		printk("after fork child\n");
-		printk("after fork child\n");
-		printk("after fork child\n");
-while(1);
 		init();
 	}
+asm volatile("push %%ebx;again:cmpl $88,%%ebx; jne again;pop %%ebx":);
 /*
  * task[0] is meant to be used as an "idle" task: it may not sleep, but
  * it might do some general things like count free pages or it could be
@@ -503,15 +495,12 @@ void init(void)
 	sprintf(term, "TERM=con%dx%d", ORIG_VIDEO_COLS, ORIG_VIDEO_LINES);
 	int fd = open("/dev/test",O_RDWR,0);
 	int tfd = open("/dev/tty1",O_RDWR,0);
-printf("tfd:|%d|\n",tfd);
-//write(tfd,"helloworld\n",11);
 	//(void) open("/dev/tty1",O_RDWR,0);
-//asm volatile("push %%ebx;again:cmpl $88,%%ebx; jne again;pop %%ebx":);
 	(void) dup(0);
 	(void) dup(0);
-
-while(1)
-printf("hello\n");
+ROOT_DEV=100;
+printf("tfd:|%d|\n",tfd);
+asm volatile("again1:cmpl $89,%%ebx; jne again1;":);
 	execve("/etc/init",argv_init,envp_init);
 	execve("/bin/init",argv_init,envp_init);
 	execve("/sbin/init",argv_init,envp_init);

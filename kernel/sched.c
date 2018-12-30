@@ -90,7 +90,7 @@ struct task_struct init_task = INIT_TASK;
 
 unsigned long volatile jiffies=0;
 
-struct task_struct *current = &init_task;
+struct task_struct *volatile current = &init_task;
 struct task_struct *last_task_used_math = NULL;
 
 struct task_struct * task[NR_TASKS] = {&init_task, };
@@ -287,7 +287,8 @@ confuse_gcc2:
 	if(current != next)
 		kstat.context_swtch++;
 	switch_to(next);
-printk("schedule switch to next pid=%d\n",next->pid);
+printk("schedule switch cur=%d to pid=%d\n",current->pid,next->pid);
+
 	/* Now maybe reload the debug registers */
 	if(current->debugreg[7]){
 		loaddebug(0);

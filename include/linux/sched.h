@@ -303,7 +303,7 @@ struct task_struct {
 extern struct task_struct init_task;
 extern struct task_struct *task[NR_TASKS];
 extern struct task_struct *last_task_used_math;
-extern struct task_struct *current;
+extern struct task_struct *volatile current;
 extern unsigned long volatile jiffies;
 extern unsigned long itimer_ticks;
 extern unsigned long itimer_next;
@@ -357,16 +357,17 @@ __asm__("str %%ax\n\t" \
  * tha math co-processor latest.
  */
 #define switch_to(tsk) \
-__asm__("pushl %%ecx; cmpl %%ecx,current\n\t" \
+__asm__("cmpl %%ecx,current\n\t" \
 	"je 1f\n\t" \
 	"cli\n\t" \
-	"xchgl %%ecx,current\n\t" \
+	"movl %%ecx,current\n\t" \
+	/*"xchgl %%ecx,current\n\t"*/\
 	"ljmp %0\n\t" \
 	"sti\n\t" \
 	"cmpl %%ecx,last_task_used_math\n\t" \
 	"jne 1f\n\t" \
 	"clts\n" \
-	"1:popl %%ecx\n" \
+	"1:\n" \
 	: /* no output */ \
 	:"m" (*(((char *)&tsk->tss.tr)-4)), \
 	 "c" (tsk))
