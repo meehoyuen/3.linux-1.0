@@ -45,8 +45,11 @@ static int ext2_match (int len, const char * const name,
 {
 	unsigned char same;
 char buf[256];
-memset(buf, de->name, de->name_len>255?255:de->name_len);
-buf[255]=0;
+len=255;
+if(de->name_len < len)
+	len = de->name_len;
+memcpy(buf, de->name, len);
+buf[len]=0;
 printk("name:%s\n",buf);
 	if (!de || !de->inode || len > EXT2_NAME_LEN)
 		return 0;

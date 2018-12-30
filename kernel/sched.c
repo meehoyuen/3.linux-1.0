@@ -287,7 +287,7 @@ confuse_gcc2:
 	if(current != next)
 		kstat.context_swtch++;
 	switch_to(next);
-printk("schedule switch cur=%d to pid=%d\n",current->pid,next->pid);
+//printk("schedule switch cur=%d to pid=%d\n",current->pid,next->pid);
 
 	/* Now maybe reload the debug registers */
 	if(current->debugreg[7]){

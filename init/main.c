@@ -462,7 +462,7 @@ asmlinkage void start_kernel(void)
 	{
 		init();
 	}
-asm volatile("push %%ebx;again:cmpl $88,%%ebx; jne again;pop %%ebx":);
+asm volatile("again:cmpl $88,%%ebx; jne again":);//don't use stack
 /*
  * task[0] is meant to be used as an "idle" task: it may not sleep, but
  * it might do some general things like count free pages or it could be
@@ -493,14 +493,9 @@ void init(void)
 
 	setup((void *) &drive_info);
 	sprintf(term, "TERM=con%dx%d", ORIG_VIDEO_COLS, ORIG_VIDEO_LINES);
-	int fd = open("/dev/test",O_RDWR,0);
-	int tfd = open("/dev/tty1",O_RDWR,0);
-	//(void) open("/dev/tty1",O_RDWR,0);
+	(void) open("/dev/tty1",O_RDWR,0);
 	(void) dup(0);
 	(void) dup(0);
-ROOT_DEV=100;
-printf("tfd:|%d|\n",tfd);
-asm volatile("again1:cmpl $89,%%ebx; jne again1;":);
 	execve("/etc/init",argv_init,envp_init);
 	execve("/bin/init",argv_init,envp_init);
 	execve("/sbin/init",argv_init,envp_init);
